@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+	<Operation Class="PatchOperationSequence">
+		<operations>
+			
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[race and race/intelligence and race/intelligence="Humanlike"]/comps</xpath>
+				<value>
+					<li Class="Transmogged.CompProperties_Transmogged" />
+				</value>
+			</li>
+
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[@Name="BasePawn"]/inspectorTabs</xpath>
+				<value>
+					<li>Transmogged.ITab_Pawn_Transmogged</li>
+				</value>
+			</li>
+			
+		</operations>
+	</Operation>
+</Patch>
