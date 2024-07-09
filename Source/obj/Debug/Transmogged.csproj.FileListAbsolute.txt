@@ -4,3 +4,4 @@ C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Assemblies\Transmogged.dll
 C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Assemblies\Transmogged.pdb
 C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Source\obj\Debug\Transmogged.dll
 C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Source\obj\Debug\Transmogged.pdb
+C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Source\obj\Debug\Transmogged.csproj.CopyComplete

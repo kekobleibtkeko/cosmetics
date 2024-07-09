@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+	<Transmogged.Transmogged>Transmogged</Transmogged.Transmogged>
+	
+	<Transmogged.MaxColdTemp>Max temperature for cold</Transmogged.MaxColdTemp>
+	<Transmogged.MinHotTemp>Min temperature for hot</Transmogged.MinHotTemp>
+
+	<Transmogged.Enabled>Enabled</Transmogged.Enabled>
+	<Transmogged.ApparelSets>Apparel Sets</Transmogged.ApparelSets>
+	<Transmogged.NewSet>New set</Transmogged.NewSet>
+	<Transmogged.LoadSet>Load...</Transmogged.LoadSet>
+	<Transmogged.SetName>Name</Transmogged.SetName>
+
+	<Transmogged.CopyFromApparel>Copy from apparel</Transmogged.CopyFromApparel>
+	<Transmogged.AddItem>Add...</Transmogged.AddItem>
+	<Transmogged.LoadItems>Load from...</Transmogged.LoadItems>
+	
+	<Transmogged.SaveSetTitle>Save Apparel Set</Transmogged.SaveSetTitle>
+	<Transmogged.LoadSetTitle>Select Saved Apparel Set</Transmogged.LoadSetTitle>
+
+	<Transmogged.ApparelSettings>Apparel Settings</Transmogged.ApparelSettings>
+	<Transmogged.ApparelScale>Overall Scale</Transmogged.ApparelScale>
+	<Transmogged.SideRotation>Rotation</Transmogged.SideRotation>
+	<Transmogged.SideScaleX>Width</Transmogged.SideScaleX>
+	<Transmogged.SideScaleY>Height</Transmogged.SideScaleY>
+	<Transmogged.SideOffsetX>Horizontal offset</Transmogged.SideOffsetX>
+	<Transmogged.SideOffsetY>Vertical offset</Transmogged.SideOffsetY>
+	<Transmogged.LayerOffset>Layer offset</Transmogged.LayerOffset>
+
+	<Transmogged.SideMirror>Mirror to opposite side</Transmogged.SideMirror>
+
+	<Transmogged.AddApparel>Add Apparel</Transmogged.AddApparel>
+	<Transmogged.ShowOnlyWearable>Only show wearable</Transmogged.ShowOnlyWearable>
+
+	<Transmogged.None_tooltip>Disable filters, is valid regardless of state</Transmogged.None_tooltip>
+	<Transmogged.NonDrafted_tooltip>Set is only active while not drafted</Transmogged.NonDrafted_tooltip>
+	<Transmogged.Drafted_tooltip>Set is only active while drafted</Transmogged.Drafted_tooltip>
+	<Transmogged.Indoors_tooltip>Set is only active while indoors</Transmogged.Indoors_tooltip>
+	<Transmogged.Outdoors_tooltip>Set is only active while outdoors</Transmogged.Outdoors_tooltip>
+	<Transmogged.Cold_tooltip>Set is only active while in the cold</Transmogged.Cold_tooltip>
+	<Transmogged.Hot_tooltip>Set is only active in high temperatures</Transmogged.Hot_tooltip>
+	<Transmogged.Sleep_tooltip>Set is only active while asleep</Transmogged.Sleep_tooltip>
+	<Transmogged.Disabled_tooltip>Set is disabled</Transmogged.Disabled_tooltip>
+
+</LanguageData>
