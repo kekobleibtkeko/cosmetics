@@ -17,10 +17,13 @@ public class TextPrompt : Window
     {
         Title = title;
         AcceptAction = acceptAction;
-
-		this.doCloseButton = true;
-		this.closeOnAccept = true;
+		closeOnAccept = true;
     }
+
+	public void Accept()
+	{
+		AcceptAction(Buffer);
+	}
 
     public override void DoWindowContents(Rect inRect)
     {
@@ -32,9 +35,14 @@ public class TextPrompt : Window
 			list.Label(Title);
 			list.GapLine();
 			Buffer = list.TextEntry(Buffer);
+			var btnrow = new WidgetRow(list.curX, list.curY, UIDirection.RightThenDown);
+			if (btnrow.ButtonText("Transmogged.Cancel".Translate()))
+				Close();
+			if (btnrow.ButtonText("Transmogged.Accept".Translate()))
+				Accept();
 		}
 		list.End();
     }
 
-    public override void OnAcceptKeyPressed() => AcceptAction(Buffer);
+    public override void OnAcceptKeyPressed() => Accept();
 }

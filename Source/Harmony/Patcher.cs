@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,32 +16,43 @@ public static class TransmoggedPatches
 {
 	static TransmoggedPatches()
 	{
-		// var racedefs = DefDatabase<ThingDef>
-		// 	.AllDefsListForReading
-		// 	.Where(x => x.race != null && x.race.Humanlike);
-		// foreach (var race in racedefs)
-		// {
-		// 	race.comps.Add(new CompProperties_Transmogged());
-		// 	// race.inspectorTabs
-		// }
-
 		var harmony = new Harmony("tsuyao.transmogged");
-		harmony.PatchAll(typeof(TransmoggedMod).Assembly);
+
+		List<Type> patchclasses = new() {
+			typeof(PawnRenderTree_Adjust_Patch),
+			typeof(PawnRenderTree_SetupNodes_Patch),
+			typeof(StatWorker_Value_Unprime),
+			typeof(Pawn_ApparelTracker_WornApparel_Patch),
+			typeof(Draft_Patch),
+			typeof(Translator_Unfuck),
+			typeof(PawnRenderNodeWorker_ScaleFor_Patch),
+			typeof(PawnRenderTree_ProcessApparel_Patch),
+			typeof(ApparelGraphicRecordGetter_BodyType_Patch),
+		};
+		
+		if (TransmoggedSettings.IsHARLoaded)
+		{
+			patchclasses.Add(typeof(Alien_ExtendedGraphicsPawnWrapper_Prime_Patch));
+		}
+
+		patchclasses
+			.Select(x => harmony.CreateClassProcessor(x))
+			.Do(x => x.Patch());
 	}
 }
 
 [HarmonyPatch(typeof(PawnRenderTree), nameof(PawnRenderTree.AdjustParms))]
 public static class PawnRenderTree_Adjust_Patch
 {
-	public static void Prefix(ref PawnDrawParms parms, PawnRenderTree __instance, out Comp_Transmogged __state)
+	public static void Prefix(ref PawnDrawParms parms, PawnRenderTree __instance, out Comp_Transmogged? __state)
 	{
 		if (!__instance.pawn.TryGetComp(out __state))
 			return;
 
-		__state.PrimedStack++;
+		__state!.PrimedStack++;
 	}
 
-	public static void Postfix(ref PawnDrawParms parms, Comp_Transmogged __state)
+	public static void Postfix(ref PawnDrawParms parms, Comp_Transmogged? __state)
 	{
 		if (__state is null)
 			return;
@@ -111,7 +123,7 @@ public static class Pawn_ApparelTracker_WornApparel_Patch
 		if (comp.PrimedStack <= 0 || comp.UnprimedStack >= 1)
 			return;
 
-		__result = comp.GetApparel().ToList();
+		__result = comp.GetActiveApparel();
 	}
 }
 
@@ -146,11 +158,31 @@ public static class PawnRenderNodeWorker_ScaleFor_Patch
 			|| !parms.pawn.TryGetComp<Comp_Transmogged>(out var comp)
 			|| !comp.Enabled
 			|| !comp.TryGetCurrentTransmog(out var set)
-			|| !set!.TryGetTRApparel(node.apparel, out var tr))
+			|| !set.TryGetTRApparel(node.apparel, out var tr))
 			return;
 
 		var rtr = tr!.GetTransformFor(parms.facing);
 		__result = Vector3.Scale(__result, new Vector3(rtr.Scale.x, 1, rtr.Scale.y));
+	}
+}
+
+[HarmonyPatch(typeof(ApparelGraphicRecordGetter), nameof(ApparelGraphicRecordGetter.TryGetGraphicApparel))]
+public static class ApparelGraphicRecordGetter_BodyType_Patch
+{
+	public static void Prefix(Apparel apparel, ref BodyTypeDef bodyType, out ApparelGraphicRecord rec)
+	{
+		rec = default;
+		if (apparel is null || apparel.Wearer is null)
+			return;
+
+		if (!apparel.Wearer.TryGetComp<Comp_Transmogged>(out var comp)
+			|| !comp.Enabled
+			|| !comp.TryGetCurrentTransmog(out var set)
+			|| !set.TryGetTRApparel(apparel, out var trap)
+			|| trap!.BodyDef is null)
+			return;
+
+		bodyType = trap.BodyDef;
 	}
 }
 
@@ -168,19 +200,22 @@ public static class PawnRenderTree_ProcessApparel_Patch
 		return set!.GetDrawDataFor(apparel);
 	}
 
-	// [HarmonyTranspiler]
 	public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 	{
 		bool patched = false;
 		var insts = instructions.ToArray();
+
+		var field_thing_def = AccessTools.Field(typeof(Thing), nameof(Thing.def));
+		var field_thingdef_apparel = AccessTools.Field(typeof(ThingDef), nameof(ThingDef.apparel));
+
 		for (int i = 0; i < insts.Length; i++)
 		{
 			if (!patched
 			 &&				insts[i    ].opcode		== OpCodes.Ldarg_1
 			 &&				insts[i + 1].opcode		== OpCodes.Ldfld
-			 && (FieldInfo)	insts[i + 1].operand	== AccessTools.Field(typeof(Thing), nameof(Thing.def))
+			 && (FieldInfo)	insts[i + 1].operand	== field_thing_def
 			 &&				insts[i + 2].opcode		== OpCodes.Ldfld
-			 && (FieldInfo)	insts[i + 2].operand	== AccessTools.Field(typeof(ThingDef), nameof(ThingDef.apparel))
+			 && (FieldInfo)	insts[i + 2].operand	== field_thingdef_apparel
 			 &&				insts[i + 3].opcode		== OpCodes.Ldfld
 			 && (FieldInfo)	insts[i + 3].operand	== AccessTools.Field(typeof(ApparelProperties), nameof(ApparelProperties.drawData)))
 			 //					  i + 4 stloc.s

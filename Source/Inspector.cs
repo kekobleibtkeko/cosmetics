@@ -12,8 +12,8 @@ namespace Transmogged;
 
 public class ITab_Pawn_Transmogged : ITab
 {
-	public const float WIDTH = 500f;
-	public const float HEIGHT = 400f;
+	public const float WIDTH = 600f;
+	public const float HEIGHT = 500f;
 	public const float MARGIN_X = 16f;
 
 	public override bool IsVisible => SelPawn?.RaceProps.Humanlike == true;
@@ -49,7 +49,7 @@ public class ITab_Pawn_Transmogged : ITab
 			Text.Font = GameFont.Medium;
 			centerlist.Label("Transmogged.Transmogged".Translate());
 			Text.Font = GameFont.Tiny;
-			centerlist.Label("Maybe the true mogging were the mogs we made along the way");
+			centerlist.Label("May the most mogged maggot win");
 
 			Text.Font = GameFont.Small;
 			centerlist.CheckboxLabeled("Transmogged.Enabled".Translate(), ref active, 0);
@@ -57,11 +57,13 @@ public class ITab_Pawn_Transmogged : ITab
 			postlinerect = centerlist.GetRect(0);
 		centerlist.End();
 		
+		var sideoffset = 70;
 		tabrect
 			.ShrinkTop(postlinerect.y)
-			.SplitVerticallyWithMargin(out var left, out var right, 1);
-		left.GrowRight(20);
-		right.ShrinkLeft(20);
+			.SplitVerticallyWithMargin(out var left, out var right, 4);
+
+		left	= left.GrowRight(sideoffset);
+		right	= right.ShrinkLeft(sideoffset);
 
 		DrawSetListUI(right, comp);
 		DrawActiveSetUI(left, comp);
@@ -82,7 +84,9 @@ public class ITab_Pawn_Transmogged : ITab
 			var buttonrow = new WidgetRow(labelrect.x + (labelrect.width * .5f), labelrect.y, growDirection: UIDirection.RightThenDown);
 			if (buttonrow.ButtonText("Transmogged.NewSet".Translate()))
 			{
-				comp.ApparelSets.Add(new TRApparelSet(comp.Pawn){ Name = $"Set {comp.ApparelSets.Count + 1}"});
+				var nset = new TRApparelSet(comp.Pawn){ Name = $"Set {comp.ApparelSets.Count + 1}"};
+				comp.ApparelSets.Add(nset);
+				comp.EditingSet = nset;
 			}
 			if (buttonrow.ButtonText("Transmogged.LoadSet".Translate()))
 			{
@@ -123,13 +127,13 @@ public class ITab_Pawn_Transmogged : ITab
 					var set = comp.ApparelSets[i];
 					if (Widgets.ClickedInsideRect(right))
 					{
-						if (comp.ActiveSet != set)
+						if (comp.EditingSet != set)
 						{
 							SoundDefOf.RowTabSelect.PlayOneShotOnCamera();
 						}
-						comp.ActiveSet = set;
+						comp.EditingSet = set;
 					}
-					Widgets.DrawOptionBackground(setrect, comp.ActiveSet == set);
+					Widgets.DrawOptionBackground(setrect, comp.EditingSet == set);
 
 					var label = new FText(set.Name);
 					if (set.State.HasFlag(TRState.Disabled))
@@ -165,9 +169,9 @@ public class ITab_Pawn_Transmogged : ITab
 					var actionbuttonrect = right.RightPartPixels(right.height).ExpandedBy(-1);
 					if (Widgets.ButtonImage(actionbuttonrect, TexButton.Delete))
 					{
-						if (set == comp.ActiveSet)
+						if (set == comp.EditingSet)
 						{
-							comp.ActiveSet = null;
+							comp.EditingSet = null;
 						}
 						comp.ApparelSets.Remove(set);
 						comp.NotifyUpdate();
@@ -186,12 +190,12 @@ public class ITab_Pawn_Transmogged : ITab
 
 	public void DrawActiveSetUI(Rect rect, Comp_Transmogged comp)
 	{
-		if (comp.ActiveSet == null)
+		if (comp.EditingSet == null)
 			return;
 		
 		var changed = false;
 		Text.Font = GameFont.Small;
-		var rectsize = 24;
+		var staterectsize = 27;
 
 		var activelist = new Listing_Standard();
 		activelist.Begin(rect);
@@ -202,8 +206,8 @@ public class ITab_Pawn_Transmogged : ITab
 			foreach (TRState state in Enum.GetValues(typeof(TRState)))
 			{
 				bool active = state == TRState.None
-					? (comp.ActiveSet.State == 0)
-				 	: ((state & comp.ActiveSet.State) != 0);
+					? (comp.EditingSet.State == 0)
+				 	: ((state & comp.EditingSet.State) != 0);
 
 				float darken = active ? 0 : .6f;
 				float saturation = active ? 1 : .5f;
@@ -214,15 +218,16 @@ public class ITab_Pawn_Transmogged : ITab
 						or TRState.Indoors
 						or TRState.Cold
 						or TRState.Sleep
-						or TRState.Disabled => 4,
+						or TRState.Additive => 5,
 					TRState.None
 						or TRState.Drafted
 						or TRState.Outdoors
 						or TRState.Hot
+						or TRState.Disabled
 						or _ => 0
                 };
 
-				staterect = new Rect((i * rectsize) + extragap, 0, rectsize, rectsize);
+				staterect = new Rect((i * staterectsize) + extragap, 0, staterectsize, staterectsize);
 				var visrect = staterect.ExpandedBy(-2);
 
 				Widgets.DrawBoxSolidWithOutline(
@@ -239,17 +244,19 @@ public class ITab_Pawn_Transmogged : ITab
 				}
 				if (Widgets.ClickedInsideRect(staterect))
 				{
-					comp.ActiveSet.StateToggled(state);
+					comp.EditingSet.StateToggled(state);
 				}
-				Widgets.Label(visrect.ShrinkLeft(5), state.ToString().Substring(0, 1));
+				Text.Anchor = TextAnchor.MiddleCenter;
+				Widgets.Label(visrect, state.ToString().Substring(0, 1));
+				Text.Anchor = TextAnchor.UpperLeft;
 				TooltipHandler.TipRegion(staterect, $"Transmogged.{state}_tooltip".Translate());
 				i++;
 			}
 
-			activelist.Gap(rectsize + 2);
+			activelist.Gap(staterectsize + 1);
 			var entryrect = activelist.GetRect(Text.LineHeightOf(Text.Font));
 			Widgets.Label(entryrect, "Transmogged.SetName".Translate());
-			comp.ActiveSet.Name = Widgets.TextField(entryrect.RightHalf(), comp.ActiveSet.Name);
+			comp.EditingSet.Name = Widgets.TextField(entryrect.RightHalf(), comp.EditingSet.Name);
 			activelist.GapLine();
 
 			Text.Font = GameFont.Tiny;
@@ -258,33 +265,33 @@ public class ITab_Pawn_Transmogged : ITab
 			{
 				if (!KeyBindingDefOf.ModifierIncrement_10x.IsDownEvent) // ctrl?
 				{
-					comp.ActiveSet.Apparel.Clear();
+					comp.EditingSet.Apparel.Clear();
 				}
 				foreach (var item in comp.Pawn.apparel.wornApparel)
 				{
-					comp.ActiveSet.AddFromApparel(item);
+					comp.EditingSet.AddFromApparel(item);
 				}
 			}
 			if (row.ButtonText("Transmogged.AddItem".Translate()))
 			{
-				Find.WindowStack.Add(new AddApparelWindow(SelPawn, comp.ActiveSet));
+				Find.WindowStack.Add(new AddApparelWindow(SelPawn, comp.EditingSet));
 			}
 			if (row.ButtonIcon(TexButton.Copy))
 			{
-				TransmoggedUtility.SetClipboard = comp.ActiveSet.CreateCopy();
+				TransmoggedUtility.SetClipboard = comp.EditingSet.CreateCopy();
 			}
 			if (TransmoggedUtility.SetClipboard is not null && row.ButtonIcon(TexButton.Paste))
 			{
 				foreach (var ap in TransmoggedUtility.SetClipboard.Apparel)
 				{
-					comp.ActiveSet.Apparel.Add(ap.CreateCopy().For(comp.Pawn));
+					comp.EditingSet.Apparel.Add(ap.CreateCopy().For(comp.Pawn));
 				}
 				changed = true;
 			}
 			if (row.ButtonIcon(TexButton.Save))
 			{
 				Find.WindowStack.Add(new TextPrompt("Transmogged.SaveSetTitle".Translate(), name => {
-					TransmoggedSave.Instance.SaveSet(name, comp.ActiveSet, true);
+					TransmoggedSave.Instance.SaveSet(name, comp.EditingSet.For(null!), true);
 				}));
 			}
 			activelist.Gap(20);
@@ -294,7 +301,7 @@ public class ITab_Pawn_Transmogged : ITab
 		var apparelitemheight = 30;
 		Text.Font = GameFont.Small;
 		var scrollbounds = rect.ShrinkTop(activelist.curY);
-		var scrollcontent = new Rect(0, 0, scrollbounds.width - 16, apparelitemheight * comp.ActiveSet.Apparel.Count);
+		var scrollcontent = new Rect(0, 0, scrollbounds.width - 16, apparelitemheight * comp.EditingSet.Apparel.Count);
 
 		if (TransmoggedUtility.ApparelClipboard is not null)
 		{
@@ -305,9 +312,9 @@ public class ITab_Pawn_Transmogged : ITab
 		Widgets.BeginScrollView(scrollbounds, ref ApparelScrollPos, scrollcontent);
 		contentlist.Begin(scrollcontent);
 		{
-			for (int i = 0; i < comp.ActiveSet.Apparel.Count; i++)
+			for (int i = 0; i < comp.EditingSet.Apparel.Count; i++)
 			{
-				var item = comp.ActiveSet.Apparel[i];
+				var item = comp.EditingSet.Apparel[i];
 				var itemrect = contentlist.GetRect(apparelitemheight);
 
 				var itemrectinner = itemrect.ExpandedBy(-2);
@@ -318,12 +325,12 @@ public class ITab_Pawn_Transmogged : ITab
 
 				if (i > 0 && Widgets.ButtonImage(reorderrect.TopHalf(), TexButton.ReorderUp))
 				{
-					comp.ActiveSet.Apparel.Swap(i, i - 1);
+					comp.EditingSet.Apparel.Swap(i, i - 1);
 					changed = true;
 				}
-				if (i < comp.ActiveSet.Apparel.Count - 1 && Widgets.ButtonImage(reorderrect.BottomHalf(), TexButton.ReorderDown))
+				if (i < comp.EditingSet.Apparel.Count - 1 && Widgets.ButtonImage(reorderrect.BottomHalf(), TexButton.ReorderDown))
 				{
-					comp.ActiveSet.Apparel.Swap(i, i + 1);
+					comp.EditingSet.Apparel.Swap(i, i + 1);
 					changed = true;
 				}
 
@@ -342,7 +349,7 @@ public class ITab_Pawn_Transmogged : ITab
 				Rect deleterect;
 				if (Widgets.ButtonImage(deleterect = itemrectinner.RightPartPixels(itemrectinner.height), TexButton.Delete))
 				{
-					comp.ActiveSet.RemoveApparel(item);
+					comp.EditingSet.RemoveApparel(item);
 				}
 				else if (Widgets.ButtonImage(deleterect.Move(-(itemrectinner.height + 4)), TexButton.Copy))
 				{
@@ -351,7 +358,7 @@ public class ITab_Pawn_Transmogged : ITab
 				else if (Widgets.ClickedInsideRect(itemrect))
 				{
 					SelectedApparel = item;
-					Find.WindowStack.Add(new EditApparelWindow(comp.Pawn, item, comp.ActiveSet));
+					Find.WindowStack.Add(new EditApparelWindow(comp.Pawn, item, comp.EditingSet));
 				}
 			}
 		}
@@ -359,7 +366,7 @@ public class ITab_Pawn_Transmogged : ITab
 		if (TransmoggedUtility.ApparelClipboard is not null
 			&& contentlist.ButtonImage(TexButton.Paste, apparelitemheight, apparelitemheight))
 		{
-			comp.ActiveSet.Apparel.Add(TransmoggedUtility.ApparelClipboard.CreateCopy(comp.Pawn));
+			comp.EditingSet.Apparel.Add(TransmoggedUtility.ApparelClipboard.CreateCopy(comp.Pawn));
 			changed = true;
 		}
 
@@ -450,6 +457,10 @@ public class EditApparelWindow : Window
 	private string? Buffer_SideOffsetY;
 	private string? Buffer_LayerOffset;
 
+	public static Lazy<IEnumerable<BodyTypeDef?>> BodyTypes = new(() => DefDatabase<BodyTypeDef>.AllDefsListForReading);
+
+	public override Vector2 InitialSize => new(750, 850);
+
 	public EditApparelWindow(Pawn pawn, TRApparel apparel, TRApparelSet set)
 	{
         Pawn = pawn;
@@ -461,34 +472,127 @@ public class EditApparelWindow : Window
         doCloseX = true;
     }
 
-    public override Vector2 InitialSize => new(600, 700);
 
     public override void DoWindowContents(Rect inRect)
     {
 		var siderectheight = 100;
 		var buttonrectinner = 90;
-		Rect siderect;
+		var colorrectsize = 75;
+		var leftbarsize = 150;
 
 		bool changed = false;
 
         var list = new Listing_Standard();
-		list.Begin(inRect);
+		var mainrect = inRect.ShrinkLeft(leftbarsize);
+		list.Begin(mainrect);
 		{
 			Text.Font = GameFont.Medium;
-			list.Label("Transmogged.ApparelSettings".Translate());
+			var labrect = list.Label("Transmogged.ApparelSettings".Translate());
+
+			var btnrow = new WidgetRow(labrect.RightHalf().x, labrect.y, UIDirection.RightThenDown);
+			if (btnrow.ButtonIcon(TexButton.Copy))
+			{
+				TransmoggedUtility.OffsetClipboard = Apparel.CreateCopy();
+			}
+			if (TransmoggedUtility.OffsetClipboard is not null
+				&& btnrow.ButtonIcon(TexButton.Paste))
+			{
+				Apparel.CopyTransforms(TransmoggedUtility.OffsetClipboard);
+				changed = true;
+			}
+
 			list.GapLine();
 			Text.Font = GameFont.Small;
+			list.Label("Transmogged.OverallApparelSettings".Translate());
+			list.GapLine();
+
 			changed = changed || list.SliderLabeledWithValue(ref Apparel.Scale, "Transmogged.ApparelScale".Translate(), 0, 2, ref Buffer_ApScale, resetval: 1);
-			siderect = list.GetRect(450);
+
+			
+			var lrect = list.Label("Transmogged.BodyType".Translate());
+			TooltipHandler.TipRegionByKey(lrect, "Transmogged.BodyTypeTT");
+			var bodyrectsize = 45;
+			var bodyrect = list.GetRect(bodyrectsize).LeftPartPixels(bodyrectsize);
+			
+			foreach (var btd in BodyTypes.Value.Prepend(null))
+			{
+				var bodyvisrect = bodyrect.ExpandedBy(-4);
+				Widgets.DrawOptionBackground(bodyvisrect, Apparel.BodyDef == btd);
+				if (Widgets.ButtonInvisible(bodyrect))
+				{
+					changed = true;
+					Apparel.BodyDef = btd;
+				}
+				TooltipHandler.TipRegion(bodyrect, btd?.defName ?? "Default");
+
+				if (btd is not null)
+				{
+					try
+					{
+						var rot = Rot4.South;
+						Graphic_Multi bodygraph = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(btd.bodyNakedGraphicPath, ShaderDatabase.CutoutSkin, bodyvisrect.size, Color.gray);
+						Widgets.DrawTextureFitted(bodyvisrect, bodygraph.MatAt(rot).mainTexture, 1.2f);
+					}
+					catch (System.Exception)
+					{
+						// no idea what fuckyness modded bodies may cause
+					}
+				}
+
+				bodyrect = bodyrect.Move(bodyrectsize);
+			}
+
+			{
+				var colorrect = list.GetRect(colorrectsize);
+				Widgets.DrawWindowBackground(colorrect);
+				colorrect = colorrect.ExpandedBy(-3);
+				Text.Font = GameFont.Small;
+				Color prevclr = Apparel.Color;
+				var colorlabel = "Transmogged.Color".Translate();
+
+				using (new TransmoggedUtility.TextAnchor_D(TextAnchor.MiddleLeft))
+					Widgets.Label(colorrect, colorlabel);
+
+				var wheelrect = colorrect
+					.LeftHalf()
+					.RightHalf()
+					.Square();
+
+				Widgets.HSVColorWheel(wheelrect, ref Apparel.Color, ref DraggingHSVWheel);
+				
+
+				Color.RGBToHSV(Apparel.Color, out var h, out var s, out var v);
+				Widgets.HorizontalSlider(colorrect.RightHalf(), ref v, new(0, 1), "Transmogged.Brightness".Translate());
+				Apparel.Color = Color.HSVToRGB(h, s, v);
+				
+				if (Apparel.Color != prevclr)
+				{
+					Apparel.SetApparelDirty();
+					Set.NotifyUpdate();
+				}
+			}
+
+			list.GapLine();
+			Text.Font = GameFont.Small;
+			list.Label("Transmogged.SideApparelSettings".Translate());
+			list.GapLine();
 		}
 		list.End();
 
 		var srbig = 60;
 		var srsmall = 30;
 
-		siderect.SplitVertically(siderectheight, out var left, out var rightbtnsrect);
-		var leftbtnsrect = left.TopPartPixels(siderectheight).ExpandedBy(buttonrectinner - siderectheight);
+		var siderect = new Rect(inRect.x, list.curY, inRect.width, 1000);
+		siderect.SplitVertically(siderectheight + leftbarsize, out var left, out var rightbtnsrect);
+		var leftbtnsrect = left
+			.TopPartPixels(siderectheight)
+			.ExpandedBy(buttonrectinner - siderectheight)
+			.Move(leftbarsize);
 		rightbtnsrect = rightbtnsrect.ShrinkLeft(5);
+		
+		TransmoggedData.Textures.CircleLine
+			.DrawFitted(leftbtnsrect.ExpandedBy(3), Widgets.WindowBGBorderColor);
+
 		foreach ((Rect btnrect, Rot4 btnrot) in new[]{
 			(leftbtnsrect.ShrinkBottom(srbig).ShrinkLeft(srsmall).ShrinkRight(srsmall), Rot4.North),
 			(leftbtnsrect.ShrinkTop(srbig).ShrinkLeft(srsmall).ShrinkRight(srsmall), Rot4.South),
@@ -501,65 +605,52 @@ public class EditApparelWindow : Window
 			{
 				SelectedTransform = tr;
 			}
+			TransmoggedData.Textures.Arrow
+				.DrawFitted(btnrect, color: Color.white, rotation: btnrot.AsAngle);
 		}
 
-		Text.Font = GameFont.Tiny;
+		using (var ll = new TransmoggedUtility.Listing_D(left))
 		{
-			Color prevclr = Apparel.Color;
-			var wheelrect = left.ShrinkTop(siderectheight + 10).Square();
-			Widgets.HSVColorWheel(wheelrect, ref Apparel.Color, ref DraggingHSVWheel);
-
-			if (Widgets.ColorBox(leftbtnsrect.ContractedBy(srbig / 2), ref Apparel.Color, Apparel.Color))
-			{
-				
-			}
-
-			Color.RGBToHSV(Apparel.Color, out var h, out var s, out var v);
-			Widgets.HorizontalSlider(wheelrect.GrowBottom(40).BottomPartPixels(40), ref v, new(0, 1));
-			Apparel.Color = Color.HSVToRGB(h, s, v);
-			
-			if (Apparel.Color != prevclr)
-			{
-				Apparel.SetApparelDirty();
-				Set.NotifyUpdate();
-			}
+			ll.Listing.Gap(siderectheight);
+			ll.Listing.GapLine();
+			ll.Listing.ButtonText("test");
 		}
+
+		// new PortraitsCache.PortraitParams().RenderPortrait()
+		// 		PortraitsCache.Get()
 
 		var sliderlist = new Listing_Standard();
 		sliderlist.Begin(rightbtnsrect);
-		if (SelectedTransform is not null)
 		{
-			changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.RotationOffset,	"Transmogged.SideRotation".Translate(), 0, 360,		ref Buffer_SideRotation, resetval: 0);
-			changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Scale.x,			"Transmogged.SideScaleX".Translate(), 0, 2,			ref Buffer_SideScaleX,  resetval: 1);
-			changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Scale.y,			"Transmogged.SideScaleY".Translate(), 0, 2,			ref Buffer_SideScaleY,  resetval: 1);
-			changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Offset.x,			"Transmogged.SideOffsetX".Translate(), -1, 1,		ref Buffer_SideOffsetX, resetval: 0);
-			changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Offset.z,			"Transmogged.SideOffsetY".Translate(), -1, 1,		ref Buffer_SideOffsetY, resetval: 0);
-			changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Offset.y,			"Transmogged.LayerOffset".Translate(), -.06f,.06f,	ref Buffer_LayerOffset, resetval: 0, accuracy: 0.0001f);
-        }
-		var btnrow = new WidgetRow(sliderlist.curX, sliderlist.curY, UIDirection.RightThenDown);
-		if (SelectedTransform is not null
-			&& btnrow.ButtonText("Transmogged.SideMirror".Translate()))
-		{
-			var optr = Apparel.GetTransformFor(SelectedTransform.Rotation.Opposite);
-			optr.RotationOffset = 360 - SelectedTransform.RotationOffset;
-			optr.Scale.y = SelectedTransform.Scale.y;
-			optr.Scale.x = SelectedTransform.Scale.x;
-			optr.Offset.x = -SelectedTransform.Offset.x;
-			optr.Offset.z = SelectedTransform.Offset.z;
-			optr.Offset.y = SelectedTransform.Offset.y;
-			changed = true;
-		}
-		if (btnrow.ButtonIcon(TexButton.Copy))
-		{
-			TransmoggedUtility.OffsetClipboard = Apparel.CreateCopy();
-		}
-		if (TransmoggedUtility.OffsetClipboard is not null
-			&& btnrow.ButtonIcon(TexButton.Paste))
-		{
-			Apparel.CopyTransforms(TransmoggedUtility.OffsetClipboard);
-			changed = true;
+			if (SelectedTransform is not null)
+			{
+				Text.Font = GameFont.Tiny;
+				if (sliderlist.ButtonText("Transmogged.SideMirror".Translate()))
+				{
+					var optr = Apparel.GetTransformFor(SelectedTransform.Rotation.Opposite);
+					optr.RotationOffset = 360 - SelectedTransform.RotationOffset;
+					optr.Scale.y = SelectedTransform.Scale.y;
+					optr.Scale.x = SelectedTransform.Scale.x;
+					optr.Offset.x = -SelectedTransform.Offset.x;
+					optr.Offset.z = SelectedTransform.Offset.z;
+					optr.Offset.y = SelectedTransform.Offset.y;
+					changed = true;
+				}
+				Text.Font = GameFont.Small;
+				changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.RotationOffset,	"Transmogged.SideRotation".Translate(), 0, 360,		ref Buffer_SideRotation,	resetval: 0);
+				sliderlist.Label("Transmogged.Scale".Translate());
+				changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Scale.x,			"Transmogged.SideScaleX".Translate(), 0, 2,			ref Buffer_SideScaleX,  	resetval: 1);
+				changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Scale.y,			"Transmogged.SideScaleY".Translate(), 0, 2,			ref Buffer_SideScaleY,  	resetval: 1);
+				sliderlist.Label("Transmogged.Position".Translate());
+				changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Offset.x,			"Transmogged.SideOffsetX".Translate(), -1, 1,		ref Buffer_SideOffsetX, 	resetval: 0);
+				changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Offset.z,			"Transmogged.SideOffsetY".Translate(), -1, 1,		ref Buffer_SideOffsetY, 	resetval: 0);
+				changed = changed || sliderlist.SliderLabeledWithValue(ref SelectedTransform.Offset.y,			"Transmogged.LayerOffset".Translate(), -.06f,.06f,	ref Buffer_LayerOffset, 	resetval: 0, accuracy: 0.0001f);
+			}
+			
 		}
         sliderlist.End();
+
+
 
 		if (changed)
 		{
@@ -639,11 +730,14 @@ public class AddApparelWindow : Window
 		
 		if (!string.IsNullOrEmpty(SearchTerm))
 		{
+			var ratio = (Func<string, string, int>)Fuzz.WeightedRatio;
 			if (searchdirty)
 			{
 				FilteredList = items
-					.Where(def => Fuzz.WeightedRatio(SearchTerm, def.LabelCap.Resolve()) > fuzzyratio)
-					.OrderByDescending(def => Fuzz.Ratio(SearchTerm, def.LabelCap.Resolve()))
+					.Select(def => (ratio(SearchTerm.ToLowerInvariant(), def.LabelCap.Resolve().ToLowerInvariant()), def))
+					.Where(((int w, ThingDef def) x) => x.w > fuzzyratio)
+					.OrderByDescending(((int w, ThingDef def) x) => x.w)
+					.Select(((int w, ThingDef def) x) => x.def)
 					.ToArray();
 			}
 			items = FilteredList ?? items;
@@ -663,11 +757,12 @@ public class AddApparelWindow : Window
 				var itemrect = fullitemrect.ExpandedBy(-2);
 				var height = itemrect.height;
 
-				Widgets.DrawOptionBackground(itemrect, Selected == thing);
-				if (Widgets.ClickedInsideRect(fullitemrect))
-				{
-					Selected = thing;
-				}
+				// Widgets.DrawOptionBackground(itemrect, Selected == thing);
+				Widgets.DrawWindowBackground(itemrect);
+				// if (Widgets.ClickedInsideRect(fullitemrect))
+				// {
+				// 	Selected = thing;
+				// }
 
 				Widgets.ThingIcon(itemrect.LeftPartPixels(height), thing);
 				var label = thing.LabelCap.Resolve();
@@ -682,9 +777,11 @@ public class AddApparelWindow : Window
 				{
 					AddApparel(thing);
 				}
+
 				if (thing.CanBeStyled())
 				{
-					foreach (var sd in DefDatabase<StyleCategoryDef>.AllDefsListForReading.Select(y => y.GetStyleForThingDef(thing))
+					foreach (ThingStyleDef sd in DefDatabase<StyleCategoryDef>.AllDefsListForReading
+						.Select(y => y.GetStyleForThingDef(thing))
 						.Where(x => x?.graphicData is not null))
 					{
 						btnrect = btnrect.Move(height + 4);
@@ -695,7 +792,7 @@ public class AddApparelWindow : Window
 						}
 
 						Widgets.ThingIcon(btnrect, thing, thingStyleDef: sd);
-						TooltipHandler.TipRegion(btnrect, sd.LabelCap);
+						TooltipHandler.TipRegion(btnrect, $"{sd.label} ({sd.defName})");
 					}
 				}
 			}

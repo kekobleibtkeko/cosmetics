@@ -7,8 +7,11 @@ namespace Transmogged;
 
 public class TransmoggedSettings : ModSettings
 {
-	private static readonly Lazy<TransmoggedSettings> _Instance = new(() => TransmoggedMod.Instance.GetSettings<TransmoggedSettings>());
+	private static readonly Lazy<bool> _HAR = new(() => ModLister.GetActiveModWithIdentifier("erdelf.humanoidalienraces")?.Active == true);
+	private static readonly Lazy<TransmoggedSettings> _Instance = new(TransmoggedMod.Instance.GetSettings<TransmoggedSettings>);
+	
 	public static TransmoggedSettings Instance => _Instance.Value;
+	public static bool IsHARLoaded => _HAR.Value;
 
 	public const float MaxColdTemp_Default = 5;
 	public const float MinHotTemp_Default = 20;
@@ -45,7 +48,17 @@ public class TransmoggedMod : Mod
 	public TransmoggedMod(ModContentPack content) : base(content)
 	{
 		Instance = this;
-		Debug.Log($"Transmogged loaded, settings hash: {TransmoggedSettings.Instance.GetHashCode()}"); // getting hash to init settings
+
+		foreach (var path in content.textures.GetAllUnderPath(""))
+		{
+			Log.Message(path);
+		}
+		// TransmoggedData.Textures.CircleFilled = 
+		
+		ConverterRegistrator.Register();
+
+		Log.Message($"Transmogged loaded, settings hash: {TransmoggedSettings.Instance.GetHashCode()}"); // getting hash to init settings
+		Log.Message($"Saved sets: {TransmoggedSave.Instance.SavedSets.Count}");
 	}
 
 	public override string SettingsCategory() => ID;

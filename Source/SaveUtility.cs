@@ -29,7 +29,7 @@ public static class TransmoggedSaveUtility
 						return;
 
 					if (!ObjectToXMLConverters.TryGetValue(typeof(T), out var f))
-						throw new ArgumentException("Invalid type given to LookAccurate", nameof(value));
+						throw new ArgumentException($"Invalid type '{typeof(T)}' given to LookAccurate", nameof(value));
 					
 					Scribe.saver.WriteElement(name, f(value));
 				}
@@ -37,7 +37,7 @@ public static class TransmoggedSaveUtility
             case LoadSaveMode.LoadingVars:
 				{
 					if (!XMLToObjectConverters.TryGetValue(typeof(T), out var f))
-						throw new ArgumentException("Invalid type given to LookAccurate", nameof(value));
+						throw new ArgumentException($"Invalid type '{typeof(T)}' given to LookAccurate", nameof(value));
 
 					var node = Scribe.loader.curXmlParent[name];
 					value = node is null
@@ -50,6 +50,7 @@ public static class TransmoggedSaveUtility
 
 	public static void AddConverters<T>(Func<T, string> toxml, Func<string, T> fromxml)
 	{
+		Debug.LogError($"added converter for type {typeof(T)}");
 		var type = typeof(T);
 		ObjectToXMLConverters[type] = obj => toxml((T)obj);
 		XMLToObjectConverters[type] = xml => fromxml(xml)!;
@@ -119,10 +120,9 @@ public struct Vector2XmlConverter : IAccurateXMLConverter<Vector2>
 }
 
 
-[StaticConstructorOnStartup]
 public static class ConverterRegistrator
 {
-	static ConverterRegistrator()
+	public static void Register()
 	{
 		new Vector3XmlConverter().Register();
 		new Vector2XmlConverter().Register();
