@@ -19,9 +19,9 @@ public static class TransmoggedSaveUtility
 
 	public static void LookAccurate<T>(ref T? value, string name, T? defval = default)
 	{
-        switch (Scribe.mode)
-        {
-            case LoadSaveMode.Saving:
+		switch (Scribe.mode)
+		{
+			case LoadSaveMode.Saving:
 				{
 					if (value is null
 						|| Equals(value, default)
@@ -33,8 +33,8 @@ public static class TransmoggedSaveUtility
 					
 					Scribe.saver.WriteElement(name, f(value));
 				}
-                break;
-            case LoadSaveMode.LoadingVars:
+				break;
+			case LoadSaveMode.LoadingVars:
 				{
 					if (!XMLToObjectConverters.TryGetValue(typeof(T), out var f))
 						throw new ArgumentException($"Invalid type '{typeof(T)}' given to LookAccurate", nameof(value));
@@ -44,9 +44,18 @@ public static class TransmoggedSaveUtility
 						? defval ?? default
 						: (T)f(node.InnerText);
 				}
-                break;
-        }
-    }
+				break;
+		}
+	}
+
+	public static void LookDict<K, V>(ref Dictionary<K, V> dict, string name)
+	{
+		if (Scribe.mode == LoadSaveMode.Saving)
+			dict ??= [];
+		Scribe_Collections.Look(ref dict, name);
+		if (Scribe.mode == LoadSaveMode.LoadingVars)
+			dict ??= [];
+	}
 
 	public static void AddConverters<T>(Func<T, string> toxml, Func<string, T> fromxml)
 	{
@@ -61,19 +70,19 @@ public static class TransmoggedSaveUtility
 
 public struct Vector3XmlConverter : IAccurateXMLConverter<Vector3>
 {
-    public string GetAccurateXMLString(Vector3 value)
-    {
-        return $"{value.x:0.00000},{value.y:0.00000},{value.z:0.00000}";
-    }
+	public string GetAccurateXMLString(Vector3 value)
+	{
+		return $"{value.x:0.00000},{value.y:0.00000},{value.z:0.00000}";
+	}
 
-    public Vector3 GetObjectFromXML(string xmlstring)
-    {
+	public Vector3 GetObjectFromXML(string xmlstring)
+	{
 		if (xmlstring is null)
 		{
 			return default;
 		}
 		Vector3 res = default;
-        var strs = xmlstring.Split(new[]{'(',')',',','|'}, 3, StringSplitOptions.RemoveEmptyEntries);
+		var strs = xmlstring.Split(new[]{'(',')',',','|'}, 3, StringSplitOptions.RemoveEmptyEntries);
 		for (int i = 0; i < strs.Length; i++)
 		{
 			if (float.TryParse(strs[i] ?? string.Empty, out var fres))
@@ -86,24 +95,24 @@ public struct Vector3XmlConverter : IAccurateXMLConverter<Vector3>
 			}
 		}
 		return res;
-    }
+	}
 }
 
 public struct Vector2XmlConverter : IAccurateXMLConverter<Vector2>
 {
-    public string GetAccurateXMLString(Vector2 value)
-    {
-        return $"{value.x:0.00000},{value.y:0.00000}";
-    }
+	public string GetAccurateXMLString(Vector2 value)
+	{
+		return $"{value.x:0.00000},{value.y:0.00000}";
+	}
 
-    public Vector2 GetObjectFromXML(string xmlstring)
-    {
+	public Vector2 GetObjectFromXML(string xmlstring)
+	{
 		if (xmlstring is null)
 		{
 			return default;
 		}
 		Vector2 res = default;
-        var strs = xmlstring.Split(new[]{'(',')',',','|'}, 2, StringSplitOptions.RemoveEmptyEntries);
+		var strs = xmlstring.Split(new[]{'(',')',',','|'}, 2, StringSplitOptions.RemoveEmptyEntries);
 		for (int i = 0; i < strs.Length; i++)
 		{
 			if (float.TryParse(strs[i] ?? string.Empty, out var fres))
@@ -116,7 +125,7 @@ public struct Vector2XmlConverter : IAccurateXMLConverter<Vector2>
 			}
 		}
 		return res;
-    }
+	}
 }
 
 

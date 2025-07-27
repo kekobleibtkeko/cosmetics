@@ -18,7 +18,7 @@ public static class TransmoggedPatches
 	{
 		var harmony = new Harmony("tsuyao.transmogged");
 
-		List<Type> patchclasses = new() {
+		List<Type> patchclasses = [
 			typeof(PawnRenderTree_Adjust_Patch),
 			typeof(PawnRenderTree_SetupNodes_Patch),
 			typeof(StatWorker_Value_Unprime),
@@ -28,11 +28,13 @@ public static class TransmoggedPatches
 			typeof(PawnRenderNodeWorker_ScaleFor_Patch),
 			typeof(PawnRenderTree_ProcessApparel_Patch),
 			typeof(ApparelGraphicRecordGetter_BodyType_Patch),
-		};
+			typeof(PawnRenderNode_TR),
+		];
 		
 		if (TransmoggedSettings.IsHARLoaded)
 		{
 			patchclasses.Add(typeof(Alien_ExtendedGraphicsPawnWrapper_Prime_Patch));
+			patchclasses.Add(typeof(Various_TR_HAR_Patches));
 		}
 
 		patchclasses
@@ -117,10 +119,10 @@ public static class Pawn_ApparelTracker_WornApparel_Patch
 		if (!__instance.pawn.TryGetComp<Comp_Transmogged>(out var comp))
 			return;
 
-		if (!comp.Enabled)
+		if (comp.GetData().State !=  TRCompState.Enabled)
 			return;
 		
-		if (comp.PrimedStack <= 0 || comp.UnprimedStack >= 1)
+		if (!comp.IsPrimed())
 			return;
 
 		__result = comp.GetActiveApparel();
@@ -156,7 +158,7 @@ public static class PawnRenderNodeWorker_ScaleFor_Patch
 	{
 		if (parms.pawn is null
 			|| !parms.pawn.TryGetComp<Comp_Transmogged>(out var comp)
-			|| !comp.Enabled
+			|| comp.GetData().State !=  TRCompState.Enabled
 			|| !comp.TryGetCurrentTransmog(out var set)
 			|| !set.TryGetTRApparel(node.apparel, out var tr))
 			return;
@@ -176,7 +178,7 @@ public static class ApparelGraphicRecordGetter_BodyType_Patch
 			return;
 
 		if (!apparel.Wearer.TryGetComp<Comp_Transmogged>(out var comp)
-			|| !comp.Enabled
+			|| comp.GetData().State !=  TRCompState.Enabled
 			|| !comp.TryGetCurrentTransmog(out var set)
 			|| !set.TryGetTRApparel(apparel, out var trap)
 			|| trap!.BodyDef is null)
@@ -229,5 +231,53 @@ public static class PawnRenderTree_ProcessApparel_Patch
 			}
 			yield return insts[i];
 		}
+	}
+}
+
+[HarmonyPatch]
+public static class PawnRenderNode_TR
+{
+	static List<PawnRenderSubWorker> InsertHandlerIfNeeded(PawnRenderNode node)
+	{
+		var pawn = node.tree.pawn;
+		var workers = node.Props.SubWorkers;
+
+		if (pawn is null || !pawn.TryGetComp<Comp_Transmogged>(out var comp))
+			return workers;
+
+		IEnumerable<PawnRenderSubWorker> workere = [..workers];
+		if (TransmoggedSave.Instance.AutoBodyTransforms.TryGetValue(pawn.GetAutoBodyKey(), out var trs)
+			&& trs.GetWorkerFor(node) is PawnRenderSubWorker autoworker)
+		{
+			workere = [..workere, autoworker];
+		}
+
+		if (comp.GetData().State != TRCompState.Disabled
+			&& comp.GetWorkerFor(node) is PawnRenderSubWorker compworker)
+		{
+			workere = [..workere, compworker];
+		}
+		//nameof(Map.Biome)
+		return [..workere];
+    }
+
+    [HarmonyPatch(typeof(PawnRenderNode), nameof(PawnRenderNode.GetTransform))]
+	[HarmonyTranspiler]
+	public static IEnumerable<CodeInstruction> Hair_GetTransform_Trans(IEnumerable<CodeInstruction> insts, ILGenerator generator)
+	{
+		var matcher = new CodeMatcher(insts, generator);
+
+		matcher.MatchStartForward(
+			new CodeMatch(OpCodes.Call, AccessTools.DeclaredPropertyGetter(typeof(PawnRenderNode), nameof(PawnRenderNode.Props)))
+		)
+			.ThrowIfInvalid("unable to find call to find subworkers")
+			.RemoveInstruction()
+			.RemoveInstruction()
+			// .RemoveInstructionsWithOffsets(-1, 0)
+			.InsertAndAdvance(
+				CodeMatch.Call(() => InsertHandlerIfNeeded(default!))
+			);
+
+		return matcher.Instructions();
 	}
 }

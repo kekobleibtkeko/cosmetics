@@ -43,6 +43,9 @@ public static class TransmoggedData
 		public static Texture2D CircleLine = GetTexture("UI/circleline");
 		public static Texture2D CircleFilled = GetTexture("UI/circlefilled");
 		public static Texture2D Arrow = GetTexture("UI/arrow");
+		public static Texture2D Expand = GetTexture("UI/expand");
+		public static Texture2D Move = GetTexture("UI/move");
+		public static Texture2D Orbit = GetTexture("UI/orbit");
 
 		public static Texture2D GetTexture(string relpath) => ContentFinder<Texture2D>.Get($"transmogged/{relpath}");
 	}
@@ -73,6 +76,25 @@ public class TRTransform : IExposable
 		};
 	}
 
+	public void CopyFrom(TRTransform other)
+	{
+		Rotation = other.Rotation;
+		Pivot = other.Pivot;
+		Offset = other.Offset;
+		Scale = other.Scale;
+		RotationOffset = other.RotationOffset;
+	}
+
+	public TRTransform Mirror()
+	{
+		return new(Rotation.Opposite)
+		{
+			Offset			= new(-Offset.x, Offset.y, Offset.z),
+			Scale			= new(Scale.x, Scale.y),
+			RotationOffset	= 360 - RotationOffset
+		};
+	}
+
     public void ExposeData()
 	{
 		Scribe_Values.Look(ref Rotation, "rotation");
@@ -83,18 +105,81 @@ public class TRTransform : IExposable
 	}
 }
 
+public class TRTransform4 : IExposable
+{
+	public TRTransform TransformLeft;
+	public TRTransform TransformRight;
+	public TRTransform TransformUp;
+	public TRTransform TransformDown;
+
+    public TRTransform4()
+    {
+		TransformLeft	??= new(Rot4.West);
+        TransformRight	??= new(Rot4.East);
+        TransformUp		??= new(Rot4.North);
+        TransformDown	??= new(Rot4.South);
+    }
+
+	public void CopyFrom(TRTransform4 other)
+	{
+		TransformLeft.CopyFrom(other.TransformLeft);
+		TransformRight.CopyFrom(other.TransformRight);
+		TransformUp.CopyFrom(other.TransformUp);
+		TransformDown.CopyFrom(other.TransformDown);
+	}
+
+    public TRTransform4 CreateCopy()
+	{
+		return new()
+		{
+			TransformLeft	= TransformLeft.CreateCopy(),
+			TransformRight	= TransformRight.CreateCopy(),
+			TransformUp		= TransformUp.CreateCopy(),
+			TransformDown	= TransformDown.CreateCopy()
+		};
+	}
+
+	public TRTransform4 Mirror()
+	{
+		return new()
+		{
+			TransformLeft = TransformLeft.Mirror(),
+			TransformRight = TransformRight.Mirror(),
+			TransformUp = TransformUp.Mirror(),
+			TransformDown = TransformDown.Mirror(),
+		};
+	}
+
+	public TRTransform ForRot(Rot4 rot)
+	{
+		return rot.AsInt switch
+		{
+			Rot4.EastInt		=> TransformRight,
+			Rot4.WestInt		=> TransformLeft,
+			Rot4.NorthInt		=> TransformUp,
+			Rot4.SouthInt or _	=> TransformDown
+		};
+	}
+
+    public void ExposeData()
+    {
+        Scribe_Deep.Look(ref TransformLeft, "left");
+		Scribe_Deep.Look(ref TransformRight, "right");
+		Scribe_Deep.Look(ref TransformUp, "up");
+		Scribe_Deep.Look(ref TransformDown, "down");
+    }
+}
+
 public class TRApparel : IExposable
 {
 	public ThingDef ApparelDef = default!;
     public ThingStyleDef? StyleDef;
 	public BodyTypeDef? BodyDef;
+	public ThingDef? RaceDef;
 	public Color Color = Color.white;
 	public float Scale;
 
-	public TRTransform TransformLeft;
-	public TRTransform TransformRight;
-	public TRTransform TransformUp;
-	public TRTransform TransformDown;
+	public TRTransform4 Transform;
 		
 	public Pawn? Pawn;
 	public Lazy<Apparel> InnerApparel;
@@ -104,10 +189,7 @@ public class TRApparel : IExposable
 	{
 		InnerApparel	= new(ApparelFactory);
 		InnerDrawData	= new(DrawDataFactory);
-		TransformLeft	??= new(Rot4.West);
-        TransformRight	??= new(Rot4.East);
-        TransformUp		??= new(Rot4.North);
-        TransformDown	??= new(Rot4.South);
+		Transform	  ??= new();
 	}
     public TRApparel(ThingDef apparelDef, Pawn pawn) : this()
     {
@@ -119,10 +201,7 @@ public class TRApparel : IExposable
 	public void CopyTransforms(TRApparel copyfrom)
 	{
 		Scale = copyfrom.Scale;
-		TransformLeft = copyfrom.TransformLeft.CreateCopy();
-		TransformRight = copyfrom.TransformRight.CreateCopy();
-		TransformUp = copyfrom.TransformUp.CreateCopy();
-		TransformDown = copyfrom.TransformDown.CreateCopy();
+		Transform = copyfrom.Transform.CreateCopy();
 	}
 
 	public Func<Apparel> ApparelFactory =>
@@ -155,10 +234,10 @@ public class TRApparel : IExposable
 			clone.dataNorth = clone.dataNorth?.DirtyClone()	?? new(Rot4.North, 0)	{ pivot = DrawData.PivotCenter, layer = null };
 			clone.dataSouth = clone.dataSouth?.DirtyClone()	?? new(Rot4.South, 0)	{ pivot = DrawData.PivotCenter, layer = null };
 
-			clone.dataEast	= clone.dataEast.Value.ApplyTRTransform(TransformRight);
-			clone.dataWest	= clone.dataWest.Value.ApplyTRTransform(TransformLeft);
-			clone.dataNorth = clone.dataNorth.Value.ApplyTRTransform(TransformUp);
-			clone.dataSouth = clone.dataSouth.Value.ApplyTRTransform(TransformDown);
+			clone.dataEast	= clone.dataEast.Value.ApplyTRTransform(Transform.ForRot(Rot4.East));
+			clone.dataWest	= clone.dataWest.Value.ApplyTRTransform(Transform.ForRot(Rot4.West));
+			clone.dataNorth = clone.dataNorth.Value.ApplyTRTransform(Transform.ForRot(Rot4.North));
+			clone.dataSouth = clone.dataSouth.Value.ApplyTRTransform(Transform.ForRot(Rot4.South));
 
 			clone.scale = Scale;
 
@@ -168,16 +247,7 @@ public class TRApparel : IExposable
 	public Apparel GetApparel() => (InnerApparel ??= new(ApparelFactory)).Value;
 	public DrawData GetDrawData() => (InnerDrawData ??= new(DrawDataFactory)).Value;
 
-	public TRTransform GetTransformFor(Rot4 rot)
-	{
-		return rot.AsInt switch
-		{
-			Rot4.EastInt		=> TransformRight,
-			Rot4.WestInt		=> TransformLeft,
-			Rot4.NorthInt		=> TransformUp,
-			Rot4.SouthInt or _	=> TransformDown
-		};
-	}
+	public TRTransform GetTransformFor(Rot4 rot) => Transform.ForRot(rot);
 
 	public void SetApparelDirty() => InnerApparel = (InnerApparel ??= new(ApparelFactory)).IsValueCreated
 			? new(ApparelFactory)
@@ -196,10 +266,8 @@ public class TRApparel : IExposable
 			StyleDef = StyleDef,
 			BodyDef = BodyDef,
 			Color = Color,
-            TransformLeft = TransformLeft.CreateCopy(),
-            TransformRight = TransformRight.CreateCopy(),
-            TransformUp = TransformUp.CreateCopy(),
-            TransformDown = TransformDown.CreateCopy()
+			RaceDef = RaceDef,
+            Transform = Transform.CreateCopy(),
         };
         return nap.For(forpawn ?? Pawn);
 	}
@@ -215,13 +283,11 @@ public class TRApparel : IExposable
 		Scribe_Defs.Look(ref ApparelDef, "apparelDef");
 		Scribe_Defs.Look(ref StyleDef, "styleDef");
 		Scribe_Defs.Look(ref BodyDef, "bodyDef");
+		Scribe_Defs.Look(ref RaceDef, "race");
 		Scribe_Values.Look(ref Color, "color", defaultValue: Color.white);
 		Scribe_Values.Look(ref Scale, "scale");
 
-		Scribe_Deep.Look(ref TransformLeft, "trLeft");
-		Scribe_Deep.Look(ref TransformRight, "trRight");
-		Scribe_Deep.Look(ref TransformUp, "trUp");
-		Scribe_Deep.Look(ref TransformDown, "trDown");
+		Scribe_Deep.Look(ref Transform, "trs");
 
 		Scribe_References.Look(ref Pawn, "pawn");
 	}
@@ -258,8 +324,10 @@ public class TRApparelSet : IExposable
 	public Pawn Pawn = default!;
     public string Name = "New Set";
 	public TRState State;
-	public List<TRApparel> Apparel = new();
-	public List<TRTag> Tags = new();
+	public List<TRApparel> Apparel = [];
+	public List<TRTag> Tags = [];
+	public HairDef? SetHair;
+	public BeardDef? SetBeard;
 
 	[Obsolete("do not use directly")] public TRApparelSet() { }
 	public TRApparelSet(Pawn pawn)
@@ -359,6 +427,9 @@ public class TRApparelSet : IExposable
 		Scribe_Values.Look(ref State, "state");
 		Scribe_Collections.Look(ref Apparel, "apparel");
 		Scribe_Collections.Look(ref Tags, "tags");
+		
+		Scribe_Defs.Look(ref SetHair, "hair");
+		Scribe_Defs.Look(ref SetBeard, "beard");
 	}
 
 	public float GetSetPoints(Pawn pawn, bool? outside = null, float? temp = null)
@@ -366,11 +437,13 @@ public class TRApparelSet : IExposable
 		if (State.HasFlag(TRState.Disabled))
 			return Comp_Transmogged.FLAG_UNFIT;
 
+		pawn ??= Pawn ?? throw new NullReferenceException("attempted to get set on null pawn");
+
 		if (!outside.HasValue)
 		{
 			try
 			{
-				outside = Pawn.IsOutside();
+				outside = pawn.IsOutside();
 			}
 			catch (System.Exception e)
 			{
@@ -384,7 +457,7 @@ public class TRApparelSet : IExposable
 			
 		if ((State & (TRState.NonDrafted | TRState.Drafted)) > 0)
 		{
-			if (Pawn.Drafted)
+			if (pawn.Drafted)
 			{
 				curval += State.HasFlag(TRState.Drafted)
 					? Comp_Transmogged.FLAG_FIT_HIGH
@@ -436,7 +509,7 @@ public class TRApparelSet : IExposable
 
 		if (State.HasFlag(TRState.Sleep))
 		{
-			curval += Pawn.Awake()
+			curval += (pawn?.health?.Dead ?? true) || pawn.Awake()
 				? Comp_Transmogged.FLAG_UNFIT
 				: Comp_Transmogged.FLAG_FIT_HIGH;
 		}

@@ -15,6 +15,9 @@ public static class TransmoggedUtility
 	public static TRApparel? ApparelClipboard;
 	public static TRApparel? OffsetClipboard;
 
+	public static TRTransform? TransformClipboard;
+	public static TRTransform4? Transform4Clipboard;
+
 	public static IDictionary<(Texture2D, float), Texture2D> TextureRotateCache = new Dictionary<(Texture2D, float), Texture2D>();
 
 	public static Color ColorFromHTML(string text)
@@ -72,6 +75,17 @@ public static class TransmoggedUtility
 		);
 	}
 
+	public static V Ensure<K, V>(this IDictionary<K, V> dict, K key)
+		where V : new()
+	{
+		if (!dict.TryGetValue(key, out var val))
+		{
+			val = new();
+			dict.Add(key, val);
+		}
+		return val;
+	}
+
 	public static void ToggleFlag<T>(this ref T flags, T flag)
 		where T : struct, Enum
 	{
@@ -97,6 +111,16 @@ public static class TransmoggedUtility
 	public static string GetValueLabel<T>(string name, T value)
 	{
 		return $"{name} ({value})";
+	}
+
+	public static string GetAutoBodyKey(this Pawn pawn)
+	{
+		string race = "Human";
+		if (TransmoggedSettings.IsHARLoaded && pawn.def is AlienRace.ThingDef_AlienRace alrace)
+		{
+			race = alrace.defName;
+		}
+		return $"{race}.{pawn.story.bodyType.defName}";
 	}
 
 	public static bool SliderLabeledWithValue(
@@ -280,12 +304,17 @@ public static class TransmoggedUtility
 	}
 #endregion
 
+	public static Rect WithTT(this Rect rect, string key)
+	{
+		TooltipHandler.TipRegionByKey(rect, key);
+		return rect;
+	}
+
 	public static Texture2D GetRotatedCached(this Texture2D tex, float angle)
 	{
 		var key = (tex, angle);
 		if (!TextureRotateCache.TryGetValue(key, out var res))
 		{
-
 			res = TextureRotateCache[key] = tex.Rotated(angle);
 		}
 		return res;
@@ -309,43 +338,27 @@ public static class TransmoggedUtility
 		}
 	}
 
-	public class TextSize_D : UIDisposableHelper<GameFont>
+	public class TextSize_D(GameFont value) : UIDisposableHelper<GameFont>(value)
 	{
-		public TextSize_D(GameFont value) : base(value)
-		{
-		}
-
-		public override GameFont GetValue() => Text.Font;
+        public override GameFont GetValue() => Text.Font;
 		public override void SetValue(GameFont value) => Text.Font = value;
 	}
 
-	public class GUIColor_D : UIDisposableHelper<Color>
+	public class GUIColor_D(Color value) : UIDisposableHelper<Color>(value)
 	{
-		public GUIColor_D(Color value) : base(value)
-		{
-		}
-
-		public override Color GetValue() => GUI.color;
+        public override Color GetValue() => GUI.color;
 		public override void SetValue(Color value) => GUI.color = value;
 	}
 
-    public class ActiveRT_D : UIDisposableHelper<RenderTexture>
+    public class ActiveRT_D(RenderTexture value) : UIDisposableHelper<RenderTexture>(value)
     {
-        public ActiveRT_D(RenderTexture value) : base(value)
-        {
-        }
-
         public override RenderTexture GetValue() => RenderTexture.active;
         public override void SetValue(RenderTexture value) => RenderTexture.active = value;
     }
 
-    public class Listing_D : UIDisposableHelper<Rect>
+    public class Listing_D(Rect value) : UIDisposableHelper<Rect>(value)
     {
-        public Listing_D(Rect value) : base(value)
-        {
-        }
-
-		public readonly Listing_Standard Listing = new();
+        public readonly Listing_Standard Listing = new();
 		
         public override Rect GetValue() => Listing.listingRect;
         public override void SetValue(Rect value) => Listing.Begin(value);
@@ -356,12 +369,8 @@ public static class TransmoggedUtility
         }
     }
 
-    public class TextAnchor_D : UIDisposableHelper<TextAnchor>
+    public class TextAnchor_D(TextAnchor value) : UIDisposableHelper<TextAnchor>(value)
     {
-        public TextAnchor_D(TextAnchor value) : base(value)
-        {
-        }
-
         public override TextAnchor GetValue() => Text.Anchor;
         public override void SetValue(TextAnchor value) => Text.Anchor = value;
     }

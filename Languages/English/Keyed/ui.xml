@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-	<Transmogged.Transmogged>Transmogged</Transmogged.Transmogged>
+	<!-- <Transmogged.Transmogged>Transmogged</Transmogged.Transmogged> -->
+	<Transmogged.Transmogged>Cosmetics</Transmogged.Transmogged>
 	
 	<Transmogged.MaxColdTemp>Max temperature for cold</Transmogged.MaxColdTemp>
 	<Transmogged.MinHotTemp>Min temperature for hot</Transmogged.MinHotTemp>
@@ -19,6 +20,7 @@
 	<Transmogged.LoadSetTitle>Select Saved Apparel Set</Transmogged.LoadSetTitle>
 
 	<Transmogged.ApparelSettings>Apparel Settings</Transmogged.ApparelSettings>
+	<Transmogged.Other>Other Apparel</Transmogged.Other>
 	<Transmogged.OverallApparelSettings>Overall Settings</Transmogged.OverallApparelSettings>
 	<Transmogged.SideApparelSettings>Side-Specific Settings</Transmogged.SideApparelSettings>
 	<Transmogged.Color>Color</Transmogged.Color>
@@ -32,8 +34,11 @@
 	<Transmogged.SideOffsetX>Horizontal offset</Transmogged.SideOffsetX>
 	<Transmogged.SideOffsetY>Vertical offset</Transmogged.SideOffsetY>
 	<Transmogged.LayerOffset>Layer offset</Transmogged.LayerOffset>
+	<Transmogged.HideHair>Hide hair</Transmogged.HideHair>
+
 
 	<Transmogged.BodyType>Body Type Override</Transmogged.BodyType>
+	<Transmogged.AsRace>Race Override</Transmogged.AsRace>
 	<Transmogged.BodyTypeTT>Select for which body type the apparel should be drawn for, will help for apparel not meant for the current pawn's race. Only useful for body apparel</Transmogged.BodyTypeTT>
 	<Transmogged.SideMirror>Mirror to opposite side</Transmogged.SideMirror>
 

@@ -8,10 +8,12 @@ namespace Transmogged;
 public class TransmoggedSettings : ModSettings
 {
 	private static readonly Lazy<bool> _HAR = new(() => ModLister.GetActiveModWithIdentifier("erdelf.humanoidalienraces")?.Active == true);
+	private static readonly Lazy<bool> _GradientHair = new(() => ModLister.GetActiveModWithIdentifier("automatic.gradienthair")?.Active == true);
 	private static readonly Lazy<TransmoggedSettings> _Instance = new(TransmoggedMod.Instance.GetSettings<TransmoggedSettings>);
 	
 	public static TransmoggedSettings Instance => _Instance.Value;
 	public static bool IsHARLoaded => _HAR.Value;
+	public static bool GradiendHairLoaded => _GradientHair.Value;
 
 	public const float MaxColdTemp_Default = 5;
 	public const float MinHotTemp_Default = 20;
@@ -20,6 +22,9 @@ public class TransmoggedSettings : ModSettings
 
 	private string? Buffer_Cold;
 	private string? Buffer_Hot;
+
+
+	
 
 	public override void ExposeData()
 	{

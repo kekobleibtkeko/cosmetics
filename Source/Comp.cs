@@ -16,26 +16,80 @@ public class CompProperties_Transmogged : CompProperties
 	}
 }
 
-public class Comp_Transmogged : ThingComp
+public enum TRCompState
+{
+	Disabled,
+	Transforms,
+	Enabled
+}
+
+public class TransmoggedCompSave : IExposable
+{
+	public TRCompState State;
+	public List<TRApparelSet> ApparelSets = [];
+	public TRTransform4 BodyTransform;
+	public TRTransform4 HeadTransform;
+	public TRTransform4 HairTransform;
+	public TRTransform4 BeardTransform;
+	public HairDef? BaseHair;
+	public BeardDef? BaseBeard;
+    
+	public TransmoggedCompSave()
+	{
+		ApparelSets ??= [];
+		BodyTransform ??= new();
+		HeadTransform ??= new();
+		HairTransform ??= new();
+		BeardTransform ??= new();
+	}
+
+	public void ExposeData()
+    {
+		Scribe_Values.Look(ref State, "state");
+		Scribe_Collections.Look(ref ApparelSets, "sets");
+		
+		Scribe_Deep.Look(ref BodyTransform, "bodytr");
+		Scribe_Deep.Look(ref HeadTransform, "headtr");
+		Scribe_Deep.Look(ref HairTransform, "hairtr");
+		Scribe_Deep.Look(ref BeardTransform, "beardtr");
+		
+		Scribe_Defs.Look(ref BaseHair, "basehair");
+		Scribe_Defs.Look(ref BaseBeard, "basebeard");
+    }
+}
+
+public class Comp_Transmogged : ThingComp, IBodyTransform
 {
 	public const float FLAG_UNFIT = -999;
 	public const float FLAG_FIT = 1;
 	public const float FLAG_FIT_WELL = 2;
 	public const float FLAG_FIT_HIGH = 3;
 
-	public bool Enabled;
+	private TransmoggedCompSave SavedData = new();
 	public int PrimedStack = 0;
 	public int UnprimedStack = 0;
 
 	public TickTimer Timer;
-	public List<TRApparelSet> ApparelSets = new();
 
 	public TRApparelSet? EditingSet;
+	public bool ForceEditingVisible;
 	public Lazy<List<TRApparel>> ActiveSet = new();
 	public Lazy<List<Apparel>> ActiveApparel = new();
 
+	private PawnRenderSubWorker? HairWorker;
+	private PawnRenderSubWorker? HeadWorker;
+	private PawnRenderSubWorker? BodyWorker;
+	private PawnRenderSubWorker? BeardWorker;
+
+	public Pawn Pawn => (parent as Pawn) ?? throw new Exception("pawn was null in transmogged comp");
+
 	public Func<List<TRApparel>> ActiveSetFactory => () => {
-		List<TRApparel> res = new();
+		if (ForceEditingVisible && EditingSet is not null)
+		{
+			return EditingSet.Apparel;
+		}
+
+		List<TRApparel> res = [];
 		float maxval = 0;
 
 		IEnumerable<TRApparel>? baseset = null;
@@ -44,7 +98,6 @@ public class Comp_Transmogged : ThingComp
 		{
 			outside = Pawn.IsOutside(); // throws here in some circumstances, unsure which
 		}
-		
 		catch (System.Exception e)
 		{
 			Debug.LogError($"CAUGHT: {e}{e.StackTrace}");
@@ -52,8 +105,8 @@ public class Comp_Transmogged : ThingComp
 		}
 
 		float temp = Pawn.AmbientTemperature;
-		var nonadditive = (ApparelSets ??= new()).Where(x => !x.State.HasFlag(TRState.Additive));
-		var additive = ApparelSets.Except(nonadditive);
+		var nonadditive = (SavedData.ApparelSets ??= []).Where(x => !x.State.HasFlag(TRState.Additive));
+		var additive = SavedData.ApparelSets.Except(nonadditive);
 
 		foreach (var apset in nonadditive)
 		{
@@ -84,11 +137,22 @@ public class Comp_Transmogged : ThingComp
 		return ActiveSet.Value.Select(x => x.GetApparel()).ToList();
 	};
 
+	public bool IsPrimed()
+	{
+		return PrimedStack > 0 && UnprimedStack == 0;
+	}
+
     public Comp_Transmogged()
     {
 		ResetFactories();
+		SavedData ??= new();
         Timer = new();
     }
+
+	public TransmoggedCompSave GetData()
+	{
+		return SavedData ??= new();
+	}
 
 	public void ResetFactories()
 	{
@@ -96,7 +160,11 @@ public class Comp_Transmogged : ThingComp
 		ActiveApparel = new(ActiveApparelFactory);
 	}
 
-    public Pawn Pawn => (parent as Pawn) ?? throw new Exception("pawn was null in transmogged comp");
+	public void ForceEdit(bool force)
+	{
+		ForceEditingVisible = force;
+		NotifyUpdate();
+	}
 
 	public void NotifyUpdate()
 	{
@@ -104,23 +172,23 @@ public class Comp_Transmogged : ThingComp
 		Pawn.apparel.Notify_ApparelChanged();
 	}
 
-    public void SetEnabled(bool active)
+    public void SetState(TRCompState state)
 	{
-		if (Enabled != active)
+		if (SavedData.State != state)
 			NotifyUpdate();
-		Enabled = active;
+		SavedData.State = state;
 	}
 
 	public void CopySet(TRApparelSet set)
 	{
 		var nset = set.CreateCopy();
-		ApparelSets.Add(nset);
+		SavedData.ApparelSets.Add(nset);
 		EditingSet = nset;
 	}
 
 	public TRState GetCurrentPawnState()
 	{
-		if (!Enabled)
+		if (SavedData.State != TRCompState.Enabled)
 			return TRState.None;
 		
 		return Pawn.Drafted
@@ -130,7 +198,7 @@ public class Comp_Transmogged : ThingComp
 
     public override void CompTick()
     {
-		int tickstime = 60; // TODO: make configurable
+		int tickstime = 60 + UnityEngine.Random.Range(0, 5); // TODO: make configurable
 		if ((Timer ??= new()).Finished)
 		{
 			Timer.Start(GenTicks.TicksGame, tickstime, NotifyUpdate);
@@ -148,8 +216,24 @@ public class Comp_Transmogged : ThingComp
 
 	public override void PostExposeData()
 	{
-		Scribe_Values.Look(ref Enabled, "TR_active");
-		Scribe_Collections.Look(ref ApparelSets, "TR_sets");
-		Scribe_Deep.Look(ref Timer, "TR_timer");
+		Scribe_Deep.Look(ref SavedData, "TR_data");
 	}
+
+	public PawnRenderSubWorker? GetWorkerFor(PawnRenderNode node) => node switch
+	{
+		PawnRenderNode_Hair => node.parent is PawnRenderNode_Hair ? null : (HairWorker ??= new TRPawnRenderSubWorker(GetData().HairTransform)),
+		PawnRenderNode_Head => HeadWorker ??= new TRPawnRenderSubWorker(GetData().HeadTransform),
+		PawnRenderNode_Body => BodyWorker ??= new TRPawnRenderSubWorker(GetData().BodyTransform),
+		PawnRenderNode_Beard => BeardWorker ??= new TRPawnRenderSubWorker(GetData().BeardTransform),
+		_ => null,
+	};
+
+    public TRTransform4 GetTransformFor(TransformModType type) => type switch
+    {
+        TransformModType.Head => GetData().HeadTransform,
+        TransformModType.Hair => GetData().HairTransform,
+        TransformModType.Body => GetData().BodyTransform,
+        TransformModType.Beard => GetData().BeardTransform,
+		_ => throw new NotImplementedException(),
+    };
 }
