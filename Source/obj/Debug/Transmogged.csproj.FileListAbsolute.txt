@@ -5,3 +5,10 @@ C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Assemblies\Transmogged.pdb
 C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Source\obj\Debug\Transmogged.dll
 C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Source\obj\Debug\Transmogged.pdb
 C:\MoinC\actual games\Rimworld\Game\Mods\Transmogged\Source\obj\Debug\Transmogged.csproj.CopyComplete
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Transmogged.csproj.AssemblyReference.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Transmogged.csproj.CoreCompileInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Transmogged.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Transmogged.pdb
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Assemblies\Transmogged.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Assemblies\Transmogged.pdb
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Transmog.4327F0A0.Up2Date

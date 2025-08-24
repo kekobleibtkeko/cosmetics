@@ -1,0 +1,224 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\rimworld\\mods\\cosmetics\\source\\data.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:data.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\comp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:comp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\mod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:mod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\rimworld\\mods\\cosmetics\\source\\ftext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:ftext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\inspector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:inspector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\rimworld\\mods\\cosmetics\\source\\saveutility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:saveutility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\textprompt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:textprompt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\utility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:utility.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\transformeditwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:transformeditwindow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|Transmogged||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\rimworld\\mods\\cosmetics\\source\\harmony\\harpatches.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:harmony\\harpatches.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\harmony\\patcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|solutionrelative:harmony\\patcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6038526D-008B-4E28-94FA-623B3CC3ED4B}|Transmogged.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\rimworld\\mods\\cosmetics\\source\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|1e78f8db-6c07-4d61-a18f-7514010abd56"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 228,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FText.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\FText.cs",
+              "RelativeDocumentMoniker": "FText.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\FText.cs",
+              "RelativeToolTip": "FText.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T12:53:15.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SaveUtility.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\SaveUtility.cs",
+              "RelativeDocumentMoniker": "SaveUtility.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\SaveUtility.cs",
+              "RelativeToolTip": "SaveUtility.cs",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAkwHIAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T12:13:34.712Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Data.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Data.cs",
+              "RelativeDocumentMoniker": "Data.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Data.cs",
+              "RelativeToolTip": "Data.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAD4v2sAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-21T11:43:11.751Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "TransformEditWindow.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\TransformEditWindow.cs",
+              "RelativeDocumentMoniker": "TransformEditWindow.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\TransformEditWindow.cs",
+              "RelativeToolTip": "TransformEditWindow.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAswNQAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T14:59:26.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Comp.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Comp.cs",
+              "RelativeDocumentMoniker": "Comp.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Comp.cs",
+              "RelativeToolTip": "Comp.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAjwEsAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T12:56:44.06Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Transmogged",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Transmogged.csproj",
+              "RelativeDocumentMoniker": "Transmogged.csproj",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Transmogged.csproj",
+              "RelativeToolTip": "Transmogged.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-08-21T11:55:11.493Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Mod.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Mod.cs",
+              "RelativeDocumentMoniker": "Mod.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Mod.cs",
+              "RelativeToolTip": "Mod.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAcwA8AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T13:27:00.053Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Patcher.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Harmony\\Patcher.cs",
+              "RelativeDocumentMoniker": "Harmony\\Patcher.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Harmony\\Patcher.cs",
+              "RelativeToolTip": "Harmony\\Patcher.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAADgvycAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T11:26:13.146Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Utility.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Utility.cs",
+              "RelativeDocumentMoniker": "Utility.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Utility.cs",
+              "RelativeToolTip": "Utility.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAAAGUAAABjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T11:26:13.231Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Inspector.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Inspector.cs",
+              "RelativeDocumentMoniker": "Inspector.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Inspector.cs",
+              "RelativeToolTip": "Inspector.cs",
+              "ViewState": "AgIAABwEAAAAAAAAAAAAADEEAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T11:26:13.234Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "HARPatches.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Harmony\\HARPatches.cs",
+              "RelativeDocumentMoniker": "Harmony\\HARPatches.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Harmony\\HARPatches.cs",
+              "RelativeToolTip": "Harmony\\HARPatches.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T11:26:13.235Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TextPrompt.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\TextPrompt.cs",
+              "RelativeDocumentMoniker": "TextPrompt.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\TextPrompt.cs",
+              "RelativeToolTip": "TextPrompt.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAgwAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-19T11:27:33.644Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

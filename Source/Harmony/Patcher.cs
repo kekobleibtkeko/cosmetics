@@ -11,6 +11,8 @@ using Verse;
 namespace Transmogged;
 #nullable enable
 
+//#define HAR
+
 [StaticConstructorOnStartup]
 public static class TransmoggedPatches
 {
@@ -25,22 +27,43 @@ public static class TransmoggedPatches
 			typeof(Pawn_ApparelTracker_WornApparel_Patch),
 			typeof(Draft_Patch),
 			typeof(Translator_Unfuck),
-			typeof(PawnRenderNodeWorker_ScaleFor_Patch),
-			typeof(PawnRenderTree_ProcessApparel_Patch),
+			typeof(PawnRenderNodeTransform_Patch),
 			typeof(ApparelGraphicRecordGetter_BodyType_Patch),
 			typeof(PawnRenderNode_TR),
 		];
 		
 		if (TransmoggedSettings.IsHARLoaded)
 		{
+#if HAR
 			patchclasses.Add(typeof(Alien_ExtendedGraphicsPawnWrapper_Prime_Patch));
 			patchclasses.Add(typeof(Various_TR_HAR_Patches));
+#endif
 		}
 
 		patchclasses
 			.Select(x => harmony.CreateClassProcessor(x))
 			.Do(x => x.Patch());
 	}
+}
+
+[HarmonyPatch(typeof(CompStatue), nameof(CompStatue.CreateSnapshotOfPawn))]
+public static class CompStatue_Prime_Patch
+{
+	public static void Prefix(Pawn p, out Comp_Transmogged? __state)
+	{
+        if (!p.TryGetComp(out __state))
+            return;
+
+        __state!.PrimedStack++;
+    }
+
+	public static void Postfix(Pawn p, Comp_Transmogged? __state)
+	{
+        if (__state is null)
+            return;
+
+        __state.PrimedStack--;
+    }
 }
 
 [HarmonyPatch(typeof(PawnRenderTree), nameof(PawnRenderTree.AdjustParms))]
@@ -151,22 +174,55 @@ public static class Translator_Unfuck
 	}
 }
 
-[HarmonyPatch(typeof(PawnRenderNodeWorker), nameof(PawnRenderNodeWorker.ScaleFor))]
-public static class PawnRenderNodeWorker_ScaleFor_Patch
+[HarmonyPatch]
+public static class PawnRenderNodeTransform_Patch
 {
-	public static void Postfix(PawnRenderNode node, PawnDrawParms parms, PawnRenderNodeWorker __instance, ref Vector3 __result)
+	static bool TryGetTRApparel(PawnRenderNode node, PawnDrawParms parms, out TRApparel? ap)
 	{
-		if (parms.pawn is null
+		ap = default;
+        if (parms.pawn is null
 			|| !parms.pawn.TryGetComp<Comp_Transmogged>(out var comp)
-			|| comp.GetData().State !=  TRCompState.Enabled
+			|| comp.GetData().State != TRCompState.Enabled
 			|| !comp.TryGetCurrentTransmog(out var set)
-			|| !set.TryGetTRApparel(node.apparel, out var tr))
+			|| !set.TryGetTRApparel(node.apparel, out ap))
+				return false;
+		return true;
+    }
+
+	[HarmonyPostfix]
+    [HarmonyPatch(typeof(PawnRenderNodeWorker), nameof(PawnRenderNodeWorker.ScaleFor))]
+    public static void ScaleFor_Postfix(PawnRenderNode node, PawnDrawParms parms, PawnRenderNodeWorker __instance, ref Vector3 __result)
+    {
+		if (!TryGetTRApparel(node, parms, out var tr))
 			return;
 
-		var rtr = tr!.GetTransformFor(parms.facing);
-		__result = Vector3.Scale(__result, new Vector3(rtr.Scale.x, 1, rtr.Scale.y));
-	}
+        var rtr = tr!.GetTransformFor(parms.facing);
+        __result = Vector3.Scale(__result, new Vector3(rtr.Scale.x, 1, rtr.Scale.y));
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PawnRenderNodeWorker), nameof(PawnRenderNodeWorker.OffsetFor))]
+    public static void OffsetFor_Postfix(PawnRenderNode node, PawnDrawParms parms, PawnRenderNodeWorker __instance, ref Vector3 __result)
+    {
+        if (!TryGetTRApparel(node, parms, out var tr))
+            return;
+
+        var rtr = tr!.GetTransformFor(parms.facing);
+        __result = __result + rtr.Offset;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PawnRenderNodeWorker), nameof(PawnRenderNodeWorker.RotationFor))]
+    public static void RotationFor_Postfix(PawnRenderNode node, PawnDrawParms parms, PawnRenderNodeWorker __instance, ref Quaternion __result)
+    {
+        if (!TryGetTRApparel(node, parms, out var tr))
+            return;
+
+        var rtr = tr!.GetTransformFor(parms.facing);
+        __result = __result * Quaternion.AngleAxis(rtr.RotationOffset, Vector3.up);
+    }
 }
+
 
 [HarmonyPatch(typeof(ApparelGraphicRecordGetter), nameof(ApparelGraphicRecordGetter.TryGetGraphicApparel))]
 public static class ApparelGraphicRecordGetter_BodyType_Patch
@@ -185,52 +241,6 @@ public static class ApparelGraphicRecordGetter_BodyType_Patch
 			return;
 
 		bodyType = trap.BodyDef;
-	}
-}
-
-//ProcessApparel(Apparel ap, PawnRenderNode headApparelNode, PawnRenderNode bodyApparelNode)
-[HarmonyPatch(typeof(PawnRenderTree), nameof(PawnRenderTree.ProcessApparel))]
-public static class PawnRenderTree_ProcessApparel_Patch
-{
-	public static DrawData GetTransmoggedDrawData(Apparel apparel, Pawn pawn)
-	{
-		// Messages.Message($"app pawn: {Pawn}", Pawn, MessageTypeDefOf.RejectInput, historical: false);
-		if (!pawn.TryGetComp<Comp_Transmogged>(out var comp) || ! comp.TryGetCurrentTransmog(out var set))
-		{
-			return apparel.def.apparel.drawData;
-		}
-		return set!.GetDrawDataFor(apparel);
-	}
-
-	public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-	{
-		bool patched = false;
-		var insts = instructions.ToArray();
-
-		var field_thing_def = AccessTools.Field(typeof(Thing), nameof(Thing.def));
-		var field_thingdef_apparel = AccessTools.Field(typeof(ThingDef), nameof(ThingDef.apparel));
-
-		for (int i = 0; i < insts.Length; i++)
-		{
-			if (!patched
-			 &&				insts[i    ].opcode		== OpCodes.Ldarg_1
-			 &&				insts[i + 1].opcode		== OpCodes.Ldfld
-			 && (FieldInfo)	insts[i + 1].operand	== field_thing_def
-			 &&				insts[i + 2].opcode		== OpCodes.Ldfld
-			 && (FieldInfo)	insts[i + 2].operand	== field_thingdef_apparel
-			 &&				insts[i + 3].opcode		== OpCodes.Ldfld
-			 && (FieldInfo)	insts[i + 3].operand	== AccessTools.Field(typeof(ApparelProperties), nameof(ApparelProperties.drawData)))
-			 //					  i + 4 stloc.s
-			{
-				yield return new CodeInstruction(OpCodes.Ldarg_1);
-				yield return new CodeInstruction(OpCodes.Ldarg_0);
-				yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(PawnRenderTree), nameof(PawnRenderTree.pawn)));
-				yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(PawnRenderTree_ProcessApparel_Patch), nameof(GetTransmoggedDrawData)));
-				i += 4;
-				patched = true;
-			}
-			yield return insts[i];
-		}
 	}
 }
 
@@ -262,22 +272,47 @@ public static class PawnRenderNode_TR
     }
 
     [HarmonyPatch(typeof(PawnRenderNode), nameof(PawnRenderNode.GetTransform))]
-	[HarmonyTranspiler]
-	public static IEnumerable<CodeInstruction> Hair_GetTransform_Trans(IEnumerable<CodeInstruction> insts, ILGenerator generator)
+    public static void Postfix(PawnDrawParms parms, ref Vector3 offset, ref Vector3 pivot, ref Quaternion rotation, ref Vector3 scale, PawnRenderNode __instance)
 	{
-		var matcher = new CodeMatcher(insts, generator);
+        var pawn = __instance.tree.pawn;
 
-		matcher.MatchStartForward(
-			new CodeMatch(OpCodes.Call, AccessTools.DeclaredPropertyGetter(typeof(PawnRenderNode), nameof(PawnRenderNode.Props)))
-		)
-			.ThrowIfInvalid("unable to find call to find subworkers")
-			.RemoveInstruction()
-			.RemoveInstruction()
-			// .RemoveInstructionsWithOffsets(-1, 0)
-			.InsertAndAdvance(
-				CodeMatch.Call(() => InsertHandlerIfNeeded(default!))
-			);
+        if (pawn is null || !pawn.TryGetComp<Comp_Transmogged>(out var comp))
+            return;
 
-		return matcher.Instructions();
-	}
+        if (TransmoggedSave.Instance.AutoBodyTransforms.TryGetValue(pawn.GetAutoBodyKey(), out var trs)
+            && trs.GetWorkerFor(__instance) is PawnRenderSubWorker autoworker)
+        {
+            autoworker.TransformOffset(__instance, parms, ref offset, ref pivot);
+            autoworker.TransformRotation(__instance, parms, ref rotation);
+            autoworker.TransformScale(__instance, parms, ref scale);
+        }
+
+        if (comp.GetData().State != TRCompState.Disabled
+            && comp.GetWorkerFor(__instance) is PawnRenderSubWorker compworker)
+        {
+            compworker.TransformOffset(__instance, parms, ref offset, ref pivot);
+            compworker.TransformRotation(__instance, parms, ref rotation);
+            compworker.TransformScale(__instance, parms, ref scale);
+        }
+    }
+
+ //   [HarmonyPatch(typeof(PawnRenderNode), nameof(PawnRenderNode.GetTransform))]
+	//[HarmonyTranspiler]
+	//public static IEnumerable<CodeInstruction> Hair_GetTransform_Trans(IEnumerable<CodeInstruction> insts, ILGenerator generator)
+	//{
+	//	var matcher = new CodeMatcher(insts, generator);
+
+	//	matcher.MatchStartForward(
+	//		new CodeMatch(OpCodes.Call, AccessTools.DeclaredPropertyGetter(typeof(PawnRenderNode), nameof(PawnRenderNode.Props)))
+	//	)
+	//		.ThrowIfInvalid("unable to find call to find subworkers")
+	//		.RemoveInstruction()
+	//		.RemoveInstruction()
+	//		// .RemoveInstructionsWithOffsets(-1, 0)
+	//		.InsertAndAdvance(
+	//			CodeMatch.Call(() => InsertHandlerIfNeeded(default!))
+	//		);
+
+	//	return matcher.Instructions();
+	//}
 }

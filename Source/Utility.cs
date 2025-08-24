@@ -116,10 +116,16 @@ public static class TransmoggedUtility
 	public static string GetAutoBodyKey(this Pawn pawn)
 	{
 		string race = "Human";
-		if (TransmoggedSettings.IsHARLoaded && pawn.def is AlienRace.ThingDef_AlienRace alrace)
+		if (TransmoggedSettings.IsHARLoaded)
 		{
-			race = alrace.defName;
-		}
+            var alienRaceType = Type.GetType("AlienRace.ThingDef_AlienRace");
+            if (alienRaceType != null && alienRaceType.IsInstanceOfType(pawn.def))
+            {
+                var defNameProp = alienRaceType.GetProperty("defName");
+                if (defNameProp?.GetValue(pawn.def) is string defNameValue)
+                    race = defNameValue;
+            }
+        }
 		return $"{race}.{pawn.story.bodyType.defName}";
 	}
 
@@ -219,7 +225,7 @@ public static class TransmoggedUtility
 			tex = tex.GetRotatedCached(rotation);
 
 		using (new GUIColor_D(color ?? GUI.color))
-			Widgets.DrawTextureFitted(rect, tex, scale, new(1, 1), new(0, 0, 1, 1));
+			Widgets.DrawTextureFitted(rect, tex, scale, new Vector2(1, 1), new(0, 0, 1, 1));
 	}
 #region rotation
 	/// <summary>

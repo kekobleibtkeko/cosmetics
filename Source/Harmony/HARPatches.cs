@@ -1,3 +1,4 @@
+#if HAR
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using AlienRace;
@@ -72,3 +73,4 @@ public static class Various_TR_HAR_Patches
 		return matcher.Instructions();
 	}
 }
+#endif

@@ -203,7 +203,7 @@ public class Comp_Transmogged : ThingComp, IBodyTransform
 		{
 			Timer.Start(GenTicks.TicksGame, tickstime, NotifyUpdate);
 		}
-		Timer.TickInterval();
+		Timer.TickIntervalDelta();
     }
 
 	public List<Apparel> GetActiveApparel() => ActiveApparel.Value;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+	<Operation Class="PatchOperationAdd" MayRequire="erdelf.humanoidalienraces">
+		<xpath>Defs/AlienRace.ThingDef_AlienRace[race and race/intelligence and race/intelligence="Humanlike"]/comps</xpath>
+		<value>
+			<li Class="Transmogged.CompProperties_Transmogged" />
+		</value>
+	</Operation>
+</Patch>

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlienRace;
 using FuzzySharp;
 using RimWorld;
 using UnityEngine;
@@ -526,7 +525,12 @@ public class EditApparelWindow : Window
 	public RenderTexture? PortraitRT;
 
 	public static Lazy<IEnumerable<BodyTypeDef?>> BodyTypes = new(() => DefDatabase<BodyTypeDef>.AllDefsListForReading);
-	public static Lazy<IEnumerable<ThingDef?>> RaceDefs = new(() => DefDatabase<ThingDef_AlienRace>.AllDefsListForReading);
+	public static Lazy<IEnumerable<ThingDef?>> RaceDefs = new(() =>
+	{
+		if (!TransmoggedSettings.IsHARLoaded)
+			return [];
+		return DefDatabase<AlienRace.ThingDef_AlienRace>.AllDefsListForReading;
+    });
 
 	public override Vector2 InitialSize => new(750, 850);
 
