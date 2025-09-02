@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using Cosmetics;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -18,7 +19,7 @@ public static class TransmoggedPatches
 {
 	static TransmoggedPatches()
 	{
-		var harmony = new Harmony("tsuyao.transmogged");
+		var harmony = new Harmony(CosmeticsMod.ModID);
 
 		List<Type> patchclasses = [
 			typeof(PawnRenderTree_Adjust_Patch),
@@ -256,7 +257,7 @@ public static class PawnRenderNode_TR
 			return workers;
 
 		IEnumerable<PawnRenderSubWorker> workere = [..workers];
-		if (TransmoggedSave.Instance.AutoBodyTransforms.TryGetValue(pawn.GetAutoBodyKey(), out var trs)
+		if (CosmeticsSave.Instance.AutoBodyTransforms.TryGetValue(pawn.GetAutoBodyKey(), out var trs)
 			&& trs.GetWorkerFor(node) is PawnRenderSubWorker autoworker)
 		{
 			workere = [..workere, autoworker];
@@ -279,7 +280,7 @@ public static class PawnRenderNode_TR
         if (pawn is null || !pawn.TryGetComp<Comp_Transmogged>(out var comp))
             return;
 
-        if (TransmoggedSave.Instance.AutoBodyTransforms.TryGetValue(pawn.GetAutoBodyKey(), out var trs)
+        if (CosmeticsSave.Instance.AutoBodyTransforms.TryGetValue(pawn.GetAutoBodyKey(), out var trs)
             && trs.GetWorkerFor(__instance) is PawnRenderSubWorker autoworker)
         {
             autoworker.TransformOffset(__instance, parms, ref offset, ref pivot);

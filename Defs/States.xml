@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+	<Cosmetics.Data.StateDef>
+		<defName>NonDrafted</defName>
+		<shortLabel>Nd</shortLabel>
+		<order>-10000</order>
+		<color>RGB(50, 168, 164)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Drafted</defName>
+		<shortLabel>Dr</shortLabel>
+		<order>-9900</order>
+		<color>RGB(168, 93, 50)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Indoors</defName>
+		<shortLabel>In</shortLabel>
+		<order>-9800</order>
+		<color>RGB(50, 97, 168)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Outdoors</defName>
+		<shortLabel>Ou</shortLabel>
+		<order>-9700</order>
+		<color>RGB(50, 168, 82)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Cold</defName>
+		<shortLabel>Cd</shortLabel>
+		<order>-9600</order>
+		<color>RGB(88, 209, 203)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Hot</defName>
+		<shortLabel>Ht</shortLabel>
+		<order>-9500</order>
+		<color>RGB(212, 55, 55)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Sleep</defName>
+		<shortLabel>Sl</shortLabel>
+		<order>-9400</order>
+		<color>RGB(140, 37, 230)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef MayRequire="Ludeon.RimWorld.Odessey">
+		<defName>Planetside</defName>
+		<shortLabel>Pl</shortLabel>
+		<order>-9300</order>
+		<color>RGB(110, 224, 198)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef MayRequire="Ludeon.RimWorld.Odessey">
+		<defName>Space</defName>
+		<shortLabel>Sp</shortLabel>
+		<order>-9200</order>
+		<color>RGB(85, 20, 150)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef MayRequire="Ludeon.RimWorld.Odessey">
+		<defName>Vacuum</defName>
+		<shortLabel>Vc</shortLabel>
+		<order>-9100</order>
+		<color>RGB(74, 2, 45)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>None</defName>
+		<shortLabel>No</shortLabel>
+		<order>-100000000</order>
+		<color>RGB(127, 127, 127)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Addive</defName>
+		<shortLabel>Ad</shortLabel>
+		<order>10000</order>
+		<color>RGB(234, 240, 74)</color>
+	</Cosmetics.Data.StateDef>
+	
+	<Cosmetics.Data.StateDef>
+		<defName>Disabled</defName>
+		<shortLabel>X</shortLabel>
+		<order>10100</order>
+		<color>RGB(255, 0, 0)</color>
+	</Cosmetics.Data.StateDef>
+</Defs>

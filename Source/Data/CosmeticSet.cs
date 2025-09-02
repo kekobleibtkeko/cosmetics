@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RimWorld;
+using Verse;
+
+namespace Cosmetics.Data;
+
+public class CosmeticSet : IExposable
+{
+    public string Name = "New set";
+    public Pawn Pawn = default!; // is not null, will be set on deserialize
+
+    public HairDef? HairOverride;
+    public BeardDef? BeardOverride;
+
+    public List<CosmeticApparel> Apparel = [];
+    public List<CosmeticHediff> Hediffs = [];
+    public List<CosmeticGene> Genes = [];
+    public List<StateDef> States = [];
+
+    // constructer used to deserialize only
+    [Obsolete("don't use directly")]
+    public CosmeticSet() { }
+    public CosmeticSet(Pawn pawn)
+    {
+        Pawn = pawn;
+    }
+
+    public void ExposeData()
+    {
+        Scribe_Values.Look(ref Name!, "name");
+        Scribe_References.Look(ref Pawn, "pawn");
+
+        Scribe_Defs.Look(ref HairOverride, "hair");
+        Scribe_Defs.Look(ref BeardOverride, "beard");
+
+        Scribe_Collections.Look(ref Apparel, "apparel");
+        Scribe_Collections.Look(ref Hediffs, "hediffs");
+        Scribe_Collections.Look(ref Genes, "genes");
+        Scribe_Collections.Look(ref States, "states");
+    }
+}
