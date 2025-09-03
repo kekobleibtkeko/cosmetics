@@ -5,6 +5,9 @@
 		<shortLabel>Nd</shortLabel>
 		<order>-10000</order>
 		<color>RGB(50, 168, 164)</color>
+		<incompatibleStates>
+			<li>Drafted</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
@@ -12,6 +15,9 @@
 		<shortLabel>Dr</shortLabel>
 		<order>-9900</order>
 		<color>RGB(168, 93, 50)</color>
+		<incompatibleStates>
+			<li>NonDrafted</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
@@ -19,6 +25,9 @@
 		<shortLabel>In</shortLabel>
 		<order>-9800</order>
 		<color>RGB(50, 97, 168)</color>
+		<incompatibleStates>
+			<li>Outdoors</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
@@ -26,6 +35,9 @@
 		<shortLabel>Ou</shortLabel>
 		<order>-9700</order>
 		<color>RGB(50, 168, 82)</color>
+		<incompatibleStates>
+			<li>Indoors</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
@@ -33,6 +45,9 @@
 		<shortLabel>Cd</shortLabel>
 		<order>-9600</order>
 		<color>RGB(88, 209, 203)</color>
+		<incompatibleStates>
+			<li>Hot</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
@@ -40,6 +55,9 @@
 		<shortLabel>Ht</shortLabel>
 		<order>-9500</order>
 		<color>RGB(212, 55, 55)</color>
+		<incompatibleStates>
+			<li>Cold</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
@@ -49,21 +67,27 @@
 		<color>RGB(140, 37, 230)</color>
 	</Cosmetics.Data.StateDef>
 	
-	<Cosmetics.Data.StateDef MayRequire="Ludeon.RimWorld.Odessey">
+	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.odyssey">
 		<defName>Planetside</defName>
 		<shortLabel>Pl</shortLabel>
 		<order>-9300</order>
 		<color>RGB(110, 224, 198)</color>
+		<incompatibleStates>
+			<li>Space</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
-	<Cosmetics.Data.StateDef MayRequire="Ludeon.RimWorld.Odessey">
+	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.odyssey">
 		<defName>Space</defName>
 		<shortLabel>Sp</shortLabel>
 		<order>-9200</order>
 		<color>RGB(85, 20, 150)</color>
+		<incompatibleStates>
+			<li>Planetside</li>
+		</incompatibleStates>
 	</Cosmetics.Data.StateDef>
 	
-	<Cosmetics.Data.StateDef MayRequire="Ludeon.RimWorld.Odessey">
+	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.odyssey">
 		<defName>Vacuum</defName>
 		<shortLabel>Vc</shortLabel>
 		<order>-9100</order>

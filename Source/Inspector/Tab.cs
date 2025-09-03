@@ -7,6 +7,7 @@ using Cosmetics.Comp;
 using Cosmetics.Data;
 using Cosmetics.Util;
 using RimWorld;
+using RimWorld.Planet;
 using TS_Lib.Util;
 using UnityEngine;
 using Verse;
@@ -21,13 +22,14 @@ public class ITab_Pawn_Cosmetics : ITab
     public const float MARGIN_X = 5;
     public const float MARGIN_Y = 4;
 
-    public TSUtil.ScrollPosition ScrollPosition = new(default);
+    public TSUtil.ScrollPosition SetListScrollPosition = new(default);
+    public TSUtil.ScrollPosition SetDetailsScrollPosition = new(default);
 
     public override bool IsVisible => SelPawn?.RaceProps.Humanlike == true;
-
+    
     public ITab_Pawn_Cosmetics()
     {
-        labelKey = "Cosmetics.cosmetics".Translate();
+        labelKey = "cosmetics".ModTranslate();
     }
 
     public override void UpdateSize()
@@ -50,7 +52,7 @@ public class ITab_Pawn_Cosmetics : ITab
             var listing = list.Listing;
             Rect title_rect;
             using (new TSUtil.TextSize_D(GameFont.Medium))
-                title_rect = listing.Label("Cosmetics frfr".ModTranslate());
+                title_rect = listing.Label("cosmetics".ModTranslate());
 
             title_rect.LeftPart(0.95f).DrawEnumAsButtons<Comp_TSCosmetics.CompState>(
                 state => comp.Save.CompState == state,
@@ -58,58 +60,12 @@ public class ITab_Pawn_Cosmetics : ITab
                 reverse: true
             );
 
-            main_rect = listing.listingRect;
+            main_rect = listing.GetRemaining();
         }
 
         main_rect.SplitVerticallyPct(0.8f, out var left, out var right);
-        using (var list = new TSUtil.Listing_D(right))
-        {
-            if (list.Listing.ButtonText("Add new set".ModTranslate()))
-            {
-                comp.NewSet();
-            }
-
-            list.Listing.GetRect(400).DrawDraggableList(
-                comp.Save.Sets,
-                (set, set_rect) =>
-                {
-                    using (new TSUtil.TextAnchor_D(TextAnchor.MiddleLeft))
-                        Widgets.Label(set_rect, set.Name);
-                },
-                scroll_pos: ScrollPosition
-            );
-        }
-            
-            //PawnRoleSelectionWidgetBase
-            /*var drnd_group = DragAndDropWidget.NewGroup();
-            var m_pos = Event.current.mousePosition;
-            foreach (var set in comp.Save.Sets)
-            {
-                var set_rect = listing.GetRect(30);
-                Widgets.DrawOptionBackground(set_rect, false);
-                using (new TSUtil.TextAnchor_D(TextAnchor.MiddleLeft))
-                    Widgets.Label(set_rect, set.Name);
-
-                DragAndDropWidget.Draggable(drnd_group, set_rect, set, () => comp.EditingSet = set);
-
-                DragAndDropWidget.DropArea(drnd_group, set_rect, drop =>
-                {
-                    if (drop is not CosmeticSet drop_set)
-                        return;
-                    comp.Save.Sets.Swap(comp.Save.Sets.IndexOf(set), comp.Save.Sets.IndexOf(drop_set));
-                    SoundDefOf.Click.PlayOneShotOnCamera();
-                }, set);
-                listing.Gap(5);
-            */
-                //DragAndDropWidget.Drop
-                //if (DragAndDropWidget.DraggableAt(drnd_group, m_pos) is CosmeticSet draggin_set)
-                //{
-                //    if (Event.current.type == EventType.MouseUp)
-                //    {
-
-                //    }
-                //}
-            //}
-        //}
+        SetList.Draw(right, comp, SetListScrollPosition);
+        SetDetails.Draw(left, comp, SetDetailsScrollPosition);
     }
+
 }

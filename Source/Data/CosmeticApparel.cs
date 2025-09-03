@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cosmetics.Util;
 using RimWorld;
 using TS_Lib.Transforms;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class CosmeticApparel : CosmeticAttachment
     public ThingStyleDef? StyleDef;
     public BodyTypeDef? BodyDef;
     public ThingDef? RaceDef;
-    public ApparelLayerDef? LinkedLayer;
+    public CosmeticsUtil.ClothingSlot? LinkedSlot;
     public Color? Color;
     public float OverallScale = 1;
 

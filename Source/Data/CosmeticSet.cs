@@ -16,6 +16,7 @@ public class CosmeticSet : IExposable
     public HairDef? HairOverride;
     public BeardDef? BeardOverride;
 
+    public List<CosmeticApparel> OverriddenWorn = [];
     public List<CosmeticApparel> Apparel = [];
     public List<CosmeticHediff> Hediffs = [];
     public List<CosmeticGene> Genes = [];
@@ -27,6 +28,20 @@ public class CosmeticSet : IExposable
     public CosmeticSet(Pawn pawn)
     {
         Pawn = pawn;
+    }
+
+    public void ToggleState(StateDef state)
+    {
+        if (States.Contains(state))
+        {
+            States.Remove(state);
+        }
+        else
+        {
+            States.Add(state);
+            States.RemoveAll(state.incompatibleStates.Contains);
+            States.RemoveDuplicates();
+        }
     }
 
     public void ExposeData()
