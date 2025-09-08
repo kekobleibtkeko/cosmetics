@@ -1,10 +1,10 @@
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.csproj.AssemblyReference.cache
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.GeneratedMSBuildEditorConfig.editorconfig
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.AssemblyInfoInputs.cache
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.AssemblyInfo.cs
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.csproj.CoreCompileInputs.cache
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.sourcelink.json
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Assemblies\Cosmetics.dll
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Assemblies\Cosmetics.pdb
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.dll
-C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\cosmetics\Source\obj\Debug\Cosmetics.pdb
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Assemblies/Cosmetics.dll
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Assemblies/Cosmetics.pdb
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.csproj.AssemblyReference.cache
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.GeneratedMSBuildEditorConfig.editorconfig
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.AssemblyInfoInputs.cache
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.AssemblyInfo.cs
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.csproj.CoreCompileInputs.cache
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.sourcelink.json
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.dll
+/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/obj/Debug/Cosmetics.pdb

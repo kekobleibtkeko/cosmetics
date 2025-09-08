@@ -498,7 +498,7 @@ public enum EditApparelSettings
 
 public class EditApparelWindow : Window
 {
-	public Pawn Pawn { get; }
+	public Pawn	Pawn { get; }
 	public TRApparel Apparel;
 	public TRApparelSet Set { get; }
 

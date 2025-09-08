@@ -34,6 +34,20 @@ public static class CosmeticsUtil
     private readonly static Lazy<List<StateDef>> _StateDefs = new(() => [.. DefDatabase<StateDef>.AllDefsListForReading.OrderBy(def => def.order)]);
     public static List<StateDef> StateDefs = _StateDefs.Value;
 
+	private readonly static Lazy<List<ThingDef>> _AllApparel = new(() => [.. DefDatabase<ThingDef>.AllDefsListForReading.Where(x => x.IsApparel)]);
+	public static List<ThingDef> AllApparel => _AllApparel.Value;
+
+	private readonly static Lazy<List<BodyTypeDef>> _BodyTypes = new(() => [.. DefDatabase<BodyTypeDef>.AllDefsListForReading]);
+	public static List<BodyTypeDef> BodyTypes => _BodyTypes.Value;
+
+	private readonly static Lazy<List<ThingDef>> _RaceDefs = new(() =>
+	{
+		if (!CosmeticsSettings.IsHARLoaded)
+			return [];
+		return [.. DefDatabase<AlienRace.ThingDef_AlienRace>.AllDefsListForReading];
+	});
+	public static List<ThingDef> RaceDefs => _RaceDefs.Value;
+
     public static string ToTranslated(this ClothingSlot slot) => slot.ToString().ModTranslate();
 
     public static TaggedString ModTranslate(this string input) => Translator.Translate($"{CosmeticsMod.ID}.{input}");

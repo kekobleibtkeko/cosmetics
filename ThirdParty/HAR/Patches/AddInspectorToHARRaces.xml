@@ -3,7 +3,7 @@
 	<Operation Class="PatchOperationAdd" MayRequire="erdelf.humanoidalienraces">
 		<xpath>Defs/AlienRace.ThingDef_AlienRace[race and race/intelligence and race/intelligence="Humanlike"]/comps</xpath>
 		<value>
-			<li Class="Transmogged.CompProperties_Transmogged" />
+			<li Class="Cosmetics.Comp.CompProperties_TSCosmetics" />
 		</value>
 	</Operation>
 </Patch>

@@ -48,14 +48,16 @@ public class StateDef : Def, TSUtil.IToColor
 
     public Color ToColor() => color;
 
-    public override IEnumerable<string> ConfigErrors()
-    {
-        var worker_type = stateWorker;
-        if (!typeof(BaseStateWorker).IsAssignableFrom(worker_type))
-            yield return $"{nameof(stateWorker)} '{stateWorker.GetType()}' for '{this}' is not assignable from {typeof(BaseStateWorker)}";
+	public override IEnumerable<string> ConfigErrors()
+	{
+		var worker_type = stateWorker;
+		if (!typeof(BaseStateWorker).IsAssignableFrom(worker_type))
+			yield return $"{nameof(stateWorker)} '{stateWorker}' for '{this}' is not assignable from {typeof(BaseStateWorker)}";
 
-        if (incompatibleStates.Contains(this))
-            yield return $"{GetType()} '{this}' has itself in its {nameof(incompatibleStates)}";
-        yield break;
+		if (incompatibleStates.Contains(this))
+			yield return $"{GetType()} '{this}' has itself in its {nameof(incompatibleStates)}";
+
+		foreach (var er in base.ConfigErrors())
+			yield return er;
     }
 }

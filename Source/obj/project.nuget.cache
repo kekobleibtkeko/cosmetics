@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "0PctQ4G2RSE=",
+  "dgSpecHash": "vIQ4MBEyPlw=",
   "success": true,
-  "projectFilePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\cosmetics\\Source\\Cosmetics.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/alex/.local/share/Steam/steamapps/common/RimWorld/Mods/cosmetics/Source/Cosmetics.csproj",
+  "expectedPackageFiles": [
+    "/home/alex/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.3/microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "/home/alex/.nuget/packages/microsoft.netframework.referenceassemblies.net48/1.0.3/microsoft.netframework.referenceassemblies.net48.1.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

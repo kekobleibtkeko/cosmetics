@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>Head</defName>
+		<order>0</order>
+		<bodyParts>
+			<li>UpperHead</li>
+			<li>FullHead</li>
+		</bodyParts>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>TopShell</defName>
+		<order>100</order>
+		<bodyParts>
+			<li>Torso</li>
+		</bodyParts>
+		<apparelLayers>
+			<li>Shell</li>
+		</apparelLayers>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>TopMiddle</defName>
+		<order>200</order>
+		<bodyParts>
+			<li>Torso</li>
+		</bodyParts>
+		<apparelLayers>
+			<li>Middle</li>
+		</apparelLayers>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>TopSkin</defName>
+		<order>300</order>
+		<bodyParts>
+			<li>Torso</li>
+		</bodyParts>
+		<apparelLayers>
+			<li>OnSkin</li>
+		</apparelLayers>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>Bottom</defName>
+		<order>400</order>
+		<bodyParts>
+			<li>Legs</li>
+		</bodyParts>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>Belt</defName>
+		<order>500</order>
+		<apparelLayers>
+			<li>Belt</li>
+		</apparelLayers>
+	</Cosmetics.Data.CLothingSlotDef>
+</Defs>

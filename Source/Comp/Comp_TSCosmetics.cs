@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cosmetics.Data;
 using RimWorld;
+using TS_Lib.Util;
 using Verse;
 
 namespace Cosmetics.Comp;
@@ -33,11 +34,22 @@ public class Comp_TSCosmetics : ThingComp
         UpToDate,
     }
 
-    // Saved variables
-    public Comp.Save Save = new();
+	[Flags]
+	public enum CompUpdateNotify
+	{
+		None		= 0,
+		Apparel		= 1 << 0,
+		Face		= 1 << 1,
+		Body		= 1 << 2,
+		
+		All			= Apparel | Face | Body
+	}
 
-    // Non-Saved variables
-    public CompUpdateState UpdateState;
+    // Saved variables
+	public Comp.Save Save = new();
+
+	// Non-Saved variables
+	public CompUpdateState UpdateState;
     public CosmeticSet? EditingSet;
 
     public int PrimedStack = 0;
@@ -66,10 +78,22 @@ public class Comp_TSCosmetics : ThingComp
         }
     }
 
+	public void NotifyUpdate(CompUpdateNotify notify = CompUpdateNotify.All)
+	{
+		if (notify == CompUpdateNotify.None)
+			return;
+
+		if (notify.HasFlag(CompUpdateNotify.Apparel))
+		{
+			// reset faactories
+			Pawn.apparel.Notify_ApparelChanged();
+		}
+	}
+
     public override List<PawnRenderNode> CompRenderNodes()
-    {
-        return [new PawnRenderNode_TSCosmetics(this)];
-    }
+	{
+		return [new PawnRenderNode_TSCosmetics(this)];
+	}
 
     public override void PostExposeData()
     {

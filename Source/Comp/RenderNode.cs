@@ -34,7 +34,7 @@ public class PawnRenderNodeWorker_TSCosmetics : PawnRenderNodeWorker
     public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
     {
         //Log.Message($"rendering node: {node.GetType()}");
-        return base.OffsetFor(node, parms, out pivot);
+		return base.OffsetFor(node, parms, out pivot);
     }
 }
 
