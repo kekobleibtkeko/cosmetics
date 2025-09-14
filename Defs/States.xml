@@ -2,9 +2,14 @@
 <Defs>
 	<Cosmetics.Data.StateDef>
 		<defName>NonDrafted</defName>
+		<label>Non-Drafted</label>
+		<description>Set is active when pawn is not drafted.</description>
 		<shortLabel>Nd</shortLabel>
 		<order>-10000</order>
 		<color>RGB(50, 168, 164)</color>
+		<props Class="Cosmetics.Data.DraftedStateProps">
+			<drafted>false</drafted>
+		</props>
 		<incompatibleStates>
 			<li>Drafted</li>
 		</incompatibleStates>
@@ -12,9 +17,14 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Drafted</defName>
+		<label>Drafted</label>
+		<description>Set is active when pawn is drafted.</description>
 		<shortLabel>Dr</shortLabel>
 		<order>-9900</order>
 		<color>RGB(168, 93, 50)</color>
+		<props Class="Cosmetics.Data.DraftedStateProps">
+			<drafted>true</drafted>
+		</props>
 		<incompatibleStates>
 			<li>NonDrafted</li>
 		</incompatibleStates>
@@ -22,9 +32,14 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Indoors</defName>
+		<label>Indoors</label>
+		<description>Set is active when pawn is indoors.</description>
 		<shortLabel>In</shortLabel>
 		<order>-9800</order>
 		<color>RGB(50, 97, 168)</color>
+		<props Class="Cosmetics.Data.OutsideStateProps">
+			<outside>false</outside>
+		</props>
 		<incompatibleStates>
 			<li>Outdoors</li>
 		</incompatibleStates>
@@ -32,9 +47,14 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Outdoors</defName>
+		<label>Outdoors</label>
+		<description>Set is active when pawn is outdoors.</description>
 		<shortLabel>Ou</shortLabel>
 		<order>-9700</order>
 		<color>RGB(50, 168, 82)</color>
+		<props Class="Cosmetics.Data.OutsideStateProps">
+			<outside>true</outside>
+		</props>
 		<incompatibleStates>
 			<li>Indoors</li>
 		</incompatibleStates>
@@ -42,9 +62,16 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Cold</defName>
+		<label>Cold</label>
+		<description>Set is active when pawn is in cold ambient temperature.</description>
 		<shortLabel>Cd</shortLabel>
 		<order>-9600</order>
 		<color>RGB(88, 209, 203)</color>
+		<props Class="Cosmetics.Data.TemperatureStateProps">
+			<activeRange>-45~-15</activeRange>
+			<uncap>Lower</uncap>
+			<editRange>-45~25</editRange>
+		</props>
 		<incompatibleStates>
 			<li>Hot</li>
 		</incompatibleStates>
@@ -52,9 +79,16 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Hot</defName>
+		<label>Hot</label>
+		<description>Set is active when pawn is in hot ambient temperature.</description>
 		<shortLabel>Ht</shortLabel>
 		<order>-9500</order>
 		<color>RGB(212, 55, 55)</color>
+		<props Class="Cosmetics.Data.TemperatureStateProps">
+			<activeRange>20~100</activeRange>
+			<uncap>Upper</uncap>
+			<editRange>0~100</editRange>
+		</props>
 		<incompatibleStates>
 			<li>Cold</li>
 		</incompatibleStates>
@@ -62,16 +96,38 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Sleep</defName>
+		<label>Sleep</label>
+		<description>Set is active while pawn is sleeping.</description>
 		<shortLabel>Sl</shortLabel>
 		<order>-9400</order>
 		<color>RGB(140, 37, 230)</color>
+		<props Class="Cosmetics.Data.SleepStateProps" />
+	</Cosmetics.Data.StateDef>
+
+	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.biotech">
+		<defName>Pollution</defName>
+		<label>Pollution</label>
+		<description>Set is active while pawn in on polluted ground.</description>
+		<shortLabel>Po</shortLabel>
+		<order>-9450</order>
+		<color>RGB(80, 130, 40)</color>
+		<props Class="Cosmetics.Data.PollutionStateProps">
+			<polluted>true</polluted>
+			<check>Range</check>
+			<value>0</value>
+		</props>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.odyssey">
 		<defName>Planetside</defName>
+		<label>Planetside</label>
+		<description>Set is active when pawn is on the planet's terrain.</description>
 		<shortLabel>Pl</shortLabel>
 		<order>-9300</order>
 		<color>RGB(110, 224, 198)</color>
+		<props Class="Cosmetics.Data.SpaceStateProps">
+			<space>false</space>
+		</props>
 		<incompatibleStates>
 			<li>Space</li>
 		</incompatibleStates>
@@ -79,9 +135,14 @@
 	
 	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.odyssey">
 		<defName>Space</defName>
+		<label>Space</label>
+		<description>Set is active when pawn is in space, either on a platform or on a ship.</description>
 		<shortLabel>Sp</shortLabel>
 		<order>-9200</order>
 		<color>RGB(85, 20, 150)</color>
+		<props Class="Cosmetics.Data.SpaceStateProps">
+			<space>true</space>
+		</props>
 		<incompatibleStates>
 			<li>Planetside</li>
 		</incompatibleStates>
@@ -89,20 +150,32 @@
 	
 	<Cosmetics.Data.StateDef MayRequire="ludeon.rimworld.odyssey">
 		<defName>Vacuum</defName>
+		<label>Vacuum</label>
+		<description>Set is active when pawn is exposed to vacuum.</description>
 		<shortLabel>Vc</shortLabel>
 		<order>-9100</order>
 		<color>RGB(74, 2, 45)</color>
+		<props Class="Cosmetics.Data.VacuumStateProps">
+			<vacuum>true</vacuum>
+			<threshold>0.5</threshold>
+		</props>
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
 		<defName>None</defName>
+		<label>None</label>
+		<description>Does nothing.</description>
 		<shortLabel>No</shortLabel>
 		<order>-100000000</order>
 		<color>RGB(127, 127, 127)</color>
+		<props Class="Cosmetics.Data.NoneStateProps" />
 	</Cosmetics.Data.StateDef>
 	
 	<Cosmetics.Data.StateDef>
-		<defName>Addive</defName>
+		<defName>Additive</defName>
+		<label>Additive</label>
+		<description>Set is "additive", allowing it to be used with non-additive and other additive sets simultaneously.</description>
+		<!-- Functionality is hard-coded -->
 		<shortLabel>Ad</shortLabel>
 		<order>10000</order>
 		<color>RGB(234, 240, 74)</color>
@@ -110,6 +183,9 @@
 	
 	<Cosmetics.Data.StateDef>
 		<defName>Disabled</defName>
+		<label>Disabled</label>
+		<description>Set is disabled.</description>
+		<!-- Functionality is hard-coded -->
 		<shortLabel>X</shortLabel>
 		<order>10100</order>
 		<color>RGB(255, 0, 0)</color>

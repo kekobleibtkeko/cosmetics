@@ -12,27 +12,8 @@ namespace Cosmetics.Util;
 
 public static class CosmeticsUtil
 {
-    public enum ClothingSlot
-    {
-        Head,
-        TopShell,
-        TopMiddle,
-        TopSkin,
-        Bottom,
-        Belt,
-    }
-
-    public static List<ClothingSlot> ClothingSlots = [
-        ClothingSlot.Head,
-        ClothingSlot.TopShell,
-        ClothingSlot.TopMiddle,
-        ClothingSlot.TopSkin,
-        ClothingSlot.Bottom,
-        ClothingSlot.Belt,
-    ];
-
-    private readonly static Lazy<List<StateDef>> _StateDefs = new(() => [.. DefDatabase<StateDef>.AllDefsListForReading.OrderBy(def => def.order)]);
-    public static List<StateDef> StateDefs = _StateDefs.Value;
+	private readonly static Lazy<List<StateDef>> _StateDefs = new(() => [.. DefDatabase<StateDef>.AllDefsListForReading.OrderBy(def => def.order)]);
+	public static List<StateDef> StateDefs = _StateDefs.Value;
 
 	private readonly static Lazy<List<ThingDef>> _AllApparel = new(() => [.. DefDatabase<ThingDef>.AllDefsListForReading.Where(x => x.IsApparel)]);
 	public static List<ThingDef> AllApparel => _AllApparel.Value;
@@ -40,46 +21,51 @@ public static class CosmeticsUtil
 	private readonly static Lazy<List<BodyTypeDef>> _BodyTypes = new(() => [.. DefDatabase<BodyTypeDef>.AllDefsListForReading]);
 	public static List<BodyTypeDef> BodyTypes => _BodyTypes.Value;
 
+	private readonly static Lazy<List<ClothingSlotDef>> _ClothingSlots = new(() => [.. DefDatabase<ClothingSlotDef>.AllDefsListForReading.OrderBy(x => x.order)]);
+	public static List<ClothingSlotDef> ClothingSlots => _ClothingSlots.Value;
+
+	private readonly static Lazy<List<ThingDef>> _Materials = new(() => [.. DefDatabase<ThingDef>.AllDefsListForReading.Where(t => t.IsStuff)]);
+	public static List<ThingDef> Materials => _Materials.Value;
+
 	private readonly static Lazy<List<ThingDef>> _RaceDefs = new(() =>
 	{
 		if (!CosmeticsSettings.IsHARLoaded)
 			return [];
 		return [.. DefDatabase<AlienRace.ThingDef_AlienRace>.AllDefsListForReading];
 	});
+
 	public static List<ThingDef> RaceDefs => _RaceDefs.Value;
 
-    public static string ToTranslated(this ClothingSlot slot) => slot.ToString().ModTranslate();
+	public static TaggedString ModTranslate(this string input) => Translator.Translate($"{CosmeticsMod.ID}.{input.Replace(' ', '_')}");
 
-    public static TaggedString ModTranslate(this string input) => Translator.Translate($"{CosmeticsMod.ID}.{input}");
-
-    public static Apparel? GetWornApparelBySlot(this Pawn pawn, ClothingSlot slot)
-    {
-        var worn = pawn.apparel.WornApparel;
-        return slot switch
-        {
-            ClothingSlot.Head => worn.FirstOrDefault(x
-                => x.def.apparel.CoversBodyPartGroup(BodyPartGroupDefOf.UpperHead)
-                || x.def.apparel.CoversBodyPartGroup(BodyPartGroupDefOf.FullHead)
-            ),
-            ClothingSlot.TopShell => worn.FirstOrDefault(x
-                => x.def.apparel.CoversBodyPartGroup(BodyPartGroupDefOf.Torso)
-                && x.def.apparel.layers.Contains(ApparelLayerDefOf.Shell)
-            ),
-            ClothingSlot.TopMiddle => worn.FirstOrDefault(x
-                => x.def.apparel.CoversBodyPartGroup(BodyPartGroupDefOf.Torso)
-                && x.def.apparel.layers.Contains(ApparelLayerDefOf.Middle)
-            ),
-            ClothingSlot.TopSkin => worn.FirstOrDefault(x
-                => x.def.apparel.CoversBodyPartGroup(BodyPartGroupDefOf.Torso)
-                && x.def.apparel.layers.Contains(ApparelLayerDefOf.OnSkin)
-            ),
-            ClothingSlot.Bottom => worn.FirstOrDefault(x
-                => x.def.apparel.CoversBodyPartGroup(BodyPartGroupDefOf.Legs)
-            ),
-            ClothingSlot.Belt => worn.FirstOrDefault(x
-                => x.def.apparel.layers.Contains(ApparelLayerDefOf.Belt)
-            ),
-            _ => null
-        };
-    }
+	public static bool TryGetCosmeticApparelFor(this IEnumerable<CosmeticApparel> vset, Apparel apparel, out CosmeticApparel? tr)
+	{
+		tr = null;
+		foreach (var ap in vset)
+		{
+			var inner = ap.GetApparel();
+			if (apparel == inner)
+			{
+				tr = ap;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static string GetAutoBodyKey(this Pawn pawn)
+	{
+		string race = "Human";
+		if (CosmeticsSettings.IsHARLoaded)
+		{
+			var alienRaceType = Type.GetType("AlienRace.ThingDef_AlienRace");
+			if (alienRaceType != null && alienRaceType.IsInstanceOfType(pawn.def))
+			{
+				var defNameProp = alienRaceType.GetProperty("defName");
+				if (defNameProp?.GetValue(pawn.def) is string defNameValue)
+					race = defNameValue;
+			}
+		}
+		return $"{race}.{pawn.story.bodyType.defName}";
+	}
 }

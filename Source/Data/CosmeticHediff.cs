@@ -11,13 +11,15 @@ namespace Cosmetics.Data;
 
 public class CosmeticHediff : CosmeticAttachment
 {
-    public CosmeticHediff() : base()
-    {
-    }
+	public HediffDef Hediff;
+	public override string Label => throw new NotImplementedException();
+	public override string EditorKey => throw new NotImplementedException();
 
-	public CosmeticHediff(Pawn pawn) : base(pawn)
+	[Obsolete("don't use directly, constructer used to deserialize only", true)]
+	public CosmeticHediff() : base() { Hediff ??= default!; }
+	public CosmeticHediff(Pawn pawn, HediffDef def) : base(pawn)
 	{
-		
+		Hediff = def;
 	}
 
 	public override void DrawIcon(Rect rect)
@@ -25,13 +27,20 @@ public class CosmeticHediff : CosmeticAttachment
 		throw new NotImplementedException();
 	}
 
-	public override void DrawTransformSettings(Window_TransformEditor editor, Listing_Standard listing)
+	public CosmeticHediff CreateCopy()
 	{
 		throw new NotImplementedException();
 	}
 
+	public CosmeticHediff For(Pawn? pawn) => (SetPawn(pawn) as CosmeticHediff)!;
+
+	public override bool DrawOverallSettings(Window_TransformEditor editor, Listing_Standard listing)
+	{
+		return base.DrawOverallSettings(editor, listing);
+	}
+
 	public override void ExposeData()
-    {
-        base.ExposeData();
-    }
+	{
+		base.ExposeData();
+	}
 }

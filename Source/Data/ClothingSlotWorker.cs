@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cosmetics.Comp;
 using RimWorld;
 using TS_Lib.Util;
 using Verse;
@@ -9,9 +10,12 @@ namespace Cosmetics.Data;
 
 public class ClothingSlotWorkerBase
 {
+	private const string STACK_VAL = "clothingworker_equipped";
 	public virtual Apparel? GetEquippedItem(Pawn pawn, ClothingSlotDef def)
 	{
-		var worn = pawn.apparel.WornApparel;
+		// comp.PushToStack(STACK_VAL, comp.UnprimedStack);
+		var worn = pawn.apparel.wornApparel.InnerListForReading;
+		// comp.PopFromStack(STACK_VAL, comp.UnprimedStack);
 
 		return worn.FirstOrDefault(apparel =>
 		{

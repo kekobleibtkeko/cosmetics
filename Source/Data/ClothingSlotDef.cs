@@ -19,6 +19,7 @@ public class ClothingSlotDef : Def
 	public TSUtil.ListInclusionType apparelLayerInclusion;
 
 
+	[Unsaved(false)]
 	private readonly Lazy<ClothingSlotWorkerBase> _Worker;
 	public ClothingSlotWorkerBase Worker => _Worker.Value;
 
@@ -31,8 +32,8 @@ public class ClothingSlotDef : Def
 
 	public override IEnumerable<string> ConfigErrors()
 	{
-		if (!typeof(BaseStateWorker).IsAssignableFrom(slotWorker))
-			yield return $"{nameof(slotWorker)} '{slotWorker}' for '{this}' is not assignable from {typeof(BaseStateWorker)}";
+		if (!typeof(ClothingSlotWorkerBase).IsAssignableFrom(slotWorker))
+			yield return $"{nameof(slotWorker)} '{slotWorker}' for '{this}' is not assignable from {typeof(BaseStateWorker<BaseStateWorkerProps>)}";
 
 		foreach (var er in base.ConfigErrors())
 			yield return er;

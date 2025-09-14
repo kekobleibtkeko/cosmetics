@@ -9,10 +9,10 @@ namespace Cosmetics.Windows;
 public static class HARInspectorHelper
 {
 	public const float DROPDOWN_HEIGHT = 40;
-	public static void DrawRaceSelection(Listing_Standard listing, ref ThingDef? def, Pawn pawn)
+	public static bool DrawRaceSelection(Listing_Standard listing, ref ThingDef? def, Pawn pawn)
 	{
 		listing.Label("as race".ModTranslate());
-		CosmeticsUtil.RaceDefs
+		return CosmeticsUtil.RaceDefs
 			.Except(pawn.def)
 			.Prepend(null)
 			.ValueDropdown(

@@ -3,67 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cosmetics;
+using Cosmetics.Data;
+using TS_Lib.Save;
+using TS_Lib.Transforms;
 using UnityEngine;
 using Verse;
 
 namespace Cosmetics.Mod;
-
-public interface IBodyTransform
-{
-	//PawnRenderSubWorker? GetWorkerFor(PawnRenderNode node);
-	//TRTransform4 GetTransformFor(TransformModType type);
-}
-
-public class TRAutoBodyTransform : IExposable, IBodyTransform
-{
-    //public TRTransform4 BodyTransform = new();
-    //public TRTransform4 HeadTransform = new();
-    //public TRTransform4 HairTransform = new();
-    //public TRTransform4 BeardTransform = new();
-
-    //private PawnRenderSubWorker? HairWorker;
-    //private PawnRenderSubWorker? HeadWorker;
-    //private PawnRenderSubWorker? BodyWorker;
-    //private PawnRenderSubWorker? BeardWorker;
-
-    //   public PawnRenderSubWorker? GetWorkerFor(PawnRenderNode node) => node switch
-    //   {
-    //       PawnRenderNode_Hair => node.parent is PawnRenderNode_Hair ? null : (HairWorker ??= new TRPawnRenderSubWorker(HairTransform)),
-    //       PawnRenderNode_Head => HeadWorker ??= new TRPawnRenderSubWorker(HeadTransform),
-    //       PawnRenderNode_Body => BodyWorker ??= new TRPawnRenderSubWorker(BodyTransform),
-    //       PawnRenderNode_Beard => BeardWorker ??= new TRPawnRenderSubWorker(BeardTransform),
-    //       _ => null,
-    //   };
-
-    //   public void CopyFrom(Comp_Transmogged comp)
-    //{
-    //	BodyTransform.CopyFrom(comp.GetData().BodyTransform);
-    //	HeadTransform.CopyFrom(comp.GetData().HeadTransform);
-    //	HairTransform.CopyFrom(comp.GetData().HairTransform);
-    //	BeardTransform.CopyFrom(comp.GetData().BeardTransform);
-    //}
-
-    //   public void ExposeData()
-    //   {
-    //	Scribe_Deep.Look(ref BodyTransform, "body");
-    //	Scribe_Deep.Look(ref HeadTransform, "head");
-    //	Scribe_Deep.Look(ref HairTransform, "hair");
-    //	Scribe_Deep.Look(ref BeardTransform, "beard");
-    //   }
-
-    //public TRTransform4 GetTransformFor(TransformModType type) => type switch
-    //{
-    //	TransformModType.Head => HeadTransform,
-    //	TransformModType.Hair => HairTransform,
-    //	TransformModType.Body => BodyTransform,
-    //	TransformModType.Beard => BeardTransform,
-    //	_ => throw new NotImplementedException(),
-    //};
-    public void ExposeData()
-    {
-        throw new NotImplementedException();
-    }
-}
 
 public class CosmeticsSave : IExposable
 {
@@ -73,38 +19,38 @@ public class CosmeticsSave : IExposable
 	private static readonly Lazy<CosmeticsSave> _Instance = new(delegate {
 		CosmeticsSave save = new();
 		
-		//if (!File.Exists(SavePath))
-		//	return save;
+		if (!File.Exists(SavePath))
+			return save;
 		
-		//try
-		//{
-		//	Scribe.loader.InitLoading(SavePath);
-		//	ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.None, true);
-		//	Scribe_Deep.Look(ref save, DataName);
-		//	Scribe.loader.FinalizeLoading();
-		//}
-		//catch (System.Exception e)
-		//{
-		//	Log.Error($"Error loading saved apparel sets: '{e}:{e.StackTrace}'");
-		//	save = new();
-		//}
-		//var count = save.SavedSets.Count;
-		//save.SavedSets = save.SavedSets
-		//	.Where(x => x.Value.Apparel.All(x => x.ApparelDef is not null))
-		//	.ToDictionary(x => x.Key, y => y.Value);
+		try
+		{
+			Scribe.loader.InitLoading(SavePath);
+			ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.None, true);
+			Scribe_Deep.Look(ref save, DataName);
+			Scribe.loader.FinalizeLoading();
+		}
+		catch (System.Exception e)
+		{
+			Log.Error($"Error loading saved apparel sets: '{e}:{e.StackTrace}'");
+			save = new();
+		}
+		var count = save.SavedSets.Count;
+		save.SavedSets = save.SavedSets
+			.Where(x => x.Value.Apparel.All(x => x.OverrideApparelDef is not null))
+			.ToDictionary(x => x.Key, y => y.Value);
 		
-		//if (save.SavedSets.Count < count)
-		//{
-		//	Log.Warning($"{count - save.SavedSets.Count} sets were unable to load and were discarded");
-		//}
+		if (save.SavedSets.Count < count)
+		{
+			Log.Warning($"{count - save.SavedSets.Count} sets were unable to load and were discarded");
+		}
 
 		return save;
 	});
 	public static CosmeticsSave Instance => _Instance.Value;
 
-	//public Dictionary<string, TRApparelSet> SavedSets = [];
-	//public Dictionary<string, TRAutoBodyTransform> AutoBodyTransforms = [];
-	//public Dictionary<string, TRTransform4> AutoApparelTransforms = [];
+	public Dictionary<string, CosmeticSet> SavedSets = [];
+	public Dictionary<string, BodyTransforms> AutoBodyTransforms = [];
+	public Dictionary<string, TSTransform4> AutoApparelTransforms = [];
 
 	public void Save()
 	{
@@ -115,20 +61,20 @@ public class CosmeticsSave : IExposable
 		});
 	}
 
-	//public bool SaveSet(string name, TRApparelSet set, bool force)
-	//{
-	//	if (!force && SavedSets.ContainsKey(name))
-	//		return false;
+	public bool SaveSet(string name, CosmeticSet set, bool force)
+	{
+		if (!force && SavedSets.ContainsKey(name))
+			return false;
 
-	//	SavedSets[name] = set.For(default!);
-	//	Save();
-	//	return true;
-	//}
+		SavedSets[name] = set.For(default);
+		Save();
+		return true;
+	}
 
-    public void ExposeData()
-    {
-  //      TransmoggedSaveUtility.LookDict(ref SavedSets, nameof(SavedSets));
-		//TransmoggedSaveUtility.LookDict(ref AutoBodyTransforms, nameof(AutoBodyTransforms));
-		//TransmoggedSaveUtility.LookDict(ref AutoApparelTransforms, nameof(AutoApparelTransforms));
-    }
+	public void ExposeData()
+	{
+		TSSaveUtility.LookDict(ref SavedSets, nameof(SavedSets));
+		TSSaveUtility.LookDict(ref AutoBodyTransforms, nameof(AutoBodyTransforms));
+		TSSaveUtility.LookDict(ref AutoApparelTransforms, nameof(AutoApparelTransforms));
+	}
 }

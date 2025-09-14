@@ -12,11 +12,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Harmony/**" />
 		<Compile Remove="Old/**" />
-		<EmbeddedResource Remove="Harmony/**" />
 		<EmbeddedResource Remove="Old/**" />
-		<None Remove="Harmony/**" />
 		<None Remove="Old/**" />
 	</ItemGroup>
 

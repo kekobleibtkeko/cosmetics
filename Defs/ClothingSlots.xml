@@ -2,6 +2,7 @@
 <Defs>
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>Head</defName>
+		<label>Head</label>
 		<order>0</order>
 		<bodyParts>
 			<li>UpperHead</li>
@@ -11,6 +12,7 @@
 
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>TopShell</defName>
+		<label>Coat</label>
 		<order>100</order>
 		<bodyParts>
 			<li>Torso</li>
@@ -22,6 +24,7 @@
 
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>TopMiddle</defName>
+		<label>Middle</label>
 		<order>200</order>
 		<bodyParts>
 			<li>Torso</li>
@@ -33,6 +36,7 @@
 
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>TopSkin</defName>
+		<label>Shirt</label>
 		<order>300</order>
 		<bodyParts>
 			<li>Torso</li>
@@ -44,6 +48,7 @@
 
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>Bottom</defName>
+		<label>Pants</label>
 		<order>400</order>
 		<bodyParts>
 			<li>Legs</li>
@@ -52,6 +57,7 @@
 
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>Belt</defName>
+		<label>Belt</label>
 		<order>500</order>
 		<apparelLayers>
 			<li>Belt</li>

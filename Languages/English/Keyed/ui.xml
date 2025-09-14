@@ -1,62 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-	<!-- <Transmogged.Transmogged>Transmogged</Transmogged.Transmogged> -->
-	<Transmogged.Transmogged>Cosmetics</Transmogged.Transmogged>
-	
-	<Transmogged.MaxColdTemp>Max temperature for cold</Transmogged.MaxColdTemp>
-	<Transmogged.MinHotTemp>Min temperature for hot</Transmogged.MinHotTemp>
+	<cosmetics>Cosmetics</cosmetics>
+	<Cosmetics.cosmetics>Cosmetics</Cosmetics.cosmetics>
+	<Cosmetics.no_set_selected>No set selected</Cosmetics.no_set_selected>
+	<Cosmetics.add_new_set>Add new set</Cosmetics.add_new_set>
+	<Cosmetics.name_edit>Name:</Cosmetics.name_edit>
 
-	<Transmogged.Enabled>Enabled</Transmogged.Enabled>
-	<Transmogged.ApparelSets>Apparel Sets</Transmogged.ApparelSets>
-	<Transmogged.NewSet>New set</Transmogged.NewSet>
-	<Transmogged.LoadSet>Load...</Transmogged.LoadSet>
-	<Transmogged.SetName>Name</Transmogged.SetName>
+	<Cosmetics.apparel>Additional apparel</Cosmetics.apparel>
+	<Cosmetics.actual_worn>Worn apparel</Cosmetics.actual_worn>
 
-	<Transmogged.CopyFromApparel>Copy from apparel</Transmogged.CopyFromApparel>
-	<Transmogged.AddItem>Add...</Transmogged.AddItem>
-	<Transmogged.LoadItems>Load from...</Transmogged.LoadItems>
-	
-	<Transmogged.SaveSetTitle>Save Apparel Set</Transmogged.SaveSetTitle>
-	<Transmogged.LoadSetTitle>Select Saved Apparel Set</Transmogged.LoadSetTitle>
+	<Cosmetics.copy_transforms>Copy transforms</Cosmetics.copy_transforms>
+	<Cosmetics.paste_transforms>Paste transforms</Cosmetics.paste_transforms>
+	<Cosmetics.change_apparel>Change apparel...</Cosmetics.change_apparel>
+	<Cosmetics.mirror>Mirror to other side</Cosmetics.mirror>
 
-	<Transmogged.ApparelSettings>Apparel Settings</Transmogged.ApparelSettings>
-	<Transmogged.Other>Other Apparel</Transmogged.Other>
-	<Transmogged.OverallApparelSettings>Overall Settings</Transmogged.OverallApparelSettings>
-	<Transmogged.SideApparelSettings>Side-Specific Settings</Transmogged.SideApparelSettings>
-	<Transmogged.Color>Color</Transmogged.Color>
-	<Transmogged.Brightness>Brightness</Transmogged.Brightness>
-	<Transmogged.Scale>Scale</Transmogged.Scale>
-	<Transmogged.Position>Position</Transmogged.Position>
-	<Transmogged.ApparelScale>Overall Scale</Transmogged.ApparelScale>
-	<Transmogged.SideRotation>Rotation</Transmogged.SideRotation>
-	<Transmogged.SideScaleX>Horizontal stretch</Transmogged.SideScaleX>
-	<Transmogged.SideScaleY>Vertical stretch</Transmogged.SideScaleY>
-	<Transmogged.SideOffsetX>Horizontal offset</Transmogged.SideOffsetX>
-	<Transmogged.SideOffsetY>Vertical offset</Transmogged.SideOffsetY>
-	<Transmogged.LayerOffset>Layer offset</Transmogged.LayerOffset>
-	<Transmogged.HideHair>Hide hair</Transmogged.HideHair>
+	<Cosmetics.overall_scale>Overall scale</Cosmetics.overall_scale>
+	<Cosmetics.side_rotation>Rotation</Cosmetics.side_rotation>
 
+	<Cosmetics.global_transforms>Global transforms</Cosmetics.global_transforms>
+	<Cosmetics.transforms>Transforms</Cosmetics.transforms>
 
-	<Transmogged.BodyType>Body Type Override</Transmogged.BodyType>
-	<Transmogged.AsRace>Race Override</Transmogged.AsRace>
-	<Transmogged.BodyTypeTT>Select for which body type the apparel should be drawn for, will help for apparel not meant for the current pawn's race. Only useful for body apparel</Transmogged.BodyTypeTT>
-	<Transmogged.SideMirror>Mirror to opposite side</Transmogged.SideMirror>
+	<Cosmetics.scale>Size</Cosmetics.scale>
+	<Cosmetics.side_scale_x>Horizontal stretch</Cosmetics.side_scale_x>
+	<Cosmetics.side_scale_y>Vertical stretch</Cosmetics.side_scale_y>
 
-	<Transmogged.AddApparel>Select Apparel</Transmogged.AddApparel>
-	<Transmogged.ShowOnlyWearable>Only show wearable</Transmogged.ShowOnlyWearable>
+	<Cosmetics.position>Position</Cosmetics.position>
+	<Cosmetics.side_offset_x>Horizontal offset</Cosmetics.side_offset_x>
+	<Cosmetics.side_offset_y>Vertical offset</Cosmetics.side_offset_y>
+	<Cosmetics.side_offset_layer>Layer offset</Cosmetics.side_offset_layer>
 
-	<Transmogged.None_tooltip>Disable filters, is valid regardless of state</Transmogged.None_tooltip>
-	<Transmogged.NonDrafted_tooltip>Set is only active while not drafted</Transmogged.NonDrafted_tooltip>
-	<Transmogged.Drafted_tooltip>Set is only active while drafted</Transmogged.Drafted_tooltip>
-	<Transmogged.Indoors_tooltip>Set is only active while indoors</Transmogged.Indoors_tooltip>
-	<Transmogged.Outdoors_tooltip>Set is only active while outdoors</Transmogged.Outdoors_tooltip>
-	<Transmogged.Cold_tooltip>Set is only active while in the cold</Transmogged.Cold_tooltip>
-	<Transmogged.Hot_tooltip>Set is only active in high temperatures</Transmogged.Hot_tooltip>
-	<Transmogged.Sleep_tooltip>Set is only active while asleep</Transmogged.Sleep_tooltip>
-	<Transmogged.Additive_tooltip>Set is additive, the apparel within will be added to pawn if the state is valid instead of overwriting</Transmogged.Additive_tooltip>
-	<Transmogged.Disabled_tooltip>Set is disabled</Transmogged.Disabled_tooltip>
+	<Cosmetics.override_color>Override color?</Cosmetics.override_color>
+	<Cosmetics.default_color>Default color</Cosmetics.default_color>
+	<Cosmetics.material_color>Material color...</Cosmetics.material_color>
+	<Cosmetics.color>Color</Cosmetics.color>
+	<Cosmetics.brightness>Brightness</Cosmetics.brightness>
 
-	<Transmogged.Accept>Accept</Transmogged.Accept>
-	<Transmogged.Cancel>Cancel</Transmogged.Cancel>
+	<Cosmetics.as_race>Race override</Cosmetics.as_race>
+	<Cosmetics.default_race>Default race</Cosmetics.default_race>
 
+	<Cosmetics.select_apparel>Select apparel</Cosmetics.select_apparel>
+	<Cosmetics.show_only_wearable>Show only wearable</Cosmetics.show_only_wearable>
+	<Cosmetics.nothing>nothing</Cosmetics.nothing>
+
+	<Cosmetics.hide_hair>Hide hair</Cosmetics.hide_hair>
+	<Cosmetics.overall_settings>Overall settings</Cosmetics.overall_settings>
+	<Cosmetics.sidespecific_settings>Side-specific settings</Cosmetics.sidespecific_settings>
+
+	<Cosmetics.body_transform>Body transform editor</Cosmetics.body_transform>
+	<Cosmetics.apparel_transform>Apparel editor</Cosmetics.apparel_transform>
+
+	<!-- Settings -->
+	<Cosmetics.comp_update_interval>Comp update interval</Cosmetics.comp_update_interval>
+	<Cosmetics.comp_update_interval_explanation>How often (in ticks) each pawn should reevaluate their outfits.</Cosmetics.comp_update_interval_explanation>
+
+	<!-- Body transform enum -->
+	<Cosmetics.Head>Head</Cosmetics.Head>
+	<Cosmetics.Body>Body</Cosmetics.Body>
+	<Cosmetics.Hair>Hair</Cosmetics.Hair>
+	<Cosmetics.Beard>Beard</Cosmetics.Beard>
+
+	<!-- Override state-->
+	<Cosmetics.Modify.label>Mod</Cosmetics.Modify.label>
+	<Cosmetics.Modify.desc>Modify the apparel on this slot.</Cosmetics.Modify.desc>
+	<Cosmetics.Disable.label>X</Cosmetics.Disable.label>
+	<Cosmetics.Disable.desc>Disable this slot as long as this set is active.</Cosmetics.Disable.desc>
+
+	<!-- State settings -->
+	<Cosmetics.state_settings>State settings</Cosmetics.state_settings>
+	<Cosmetics.temperature_range>Temperature range</Cosmetics.temperature_range>
+	<Cosmetics.pollution_value>Pollution radius/percent</Cosmetics.pollution_value>
+	<Cosmetics.pollution_type>Pollution check type</Cosmetics.pollution_type>
+	<Cosmetics.PollutionCheckType.Range>Range</Cosmetics.PollutionCheckType.Range>
+	<Cosmetics.PollutionCheckType.Percent>Percent</Cosmetics.PollutionCheckType.Percent>
 </LanguageData>

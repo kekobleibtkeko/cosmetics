@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cosmetics.Comp;
 using Cosmetics.Util;
+using Cosmetics.Windows;
 using TS_Lib.Util;
 using UnityEngine;
 using Verse;
@@ -21,7 +22,15 @@ public static class SetList
 
 		if (list.Listing.ButtonText("add new set".ModTranslate()))
 		{
-			comp.NewSet();
+			var set = comp.NewSet();
+
+			if (TSUtil.Shift)
+			{
+				comp.SetState(Comp_TSCosmetics.CompState.Enabled);
+				comp.EditingSet = set;
+				Find.WindowStack.Add(new Window_ApparelSelection(set.Pawn, set));
+			}
+
 			changed = true;
 		}
 
