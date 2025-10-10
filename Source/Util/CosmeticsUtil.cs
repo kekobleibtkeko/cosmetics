@@ -36,7 +36,7 @@ public static class CosmeticsUtil
 
 	public static List<ThingDef> RaceDefs => _RaceDefs.Value;
 
-	public static TaggedString ModTranslate(this string input) => Translator.Translate($"{CosmeticsMod.ID}.{input.Replace(' ', '_')}");
+	public static TaggedString ModTranslate(this string input, params NamedArgument[] args) => $"{CosmeticsMod.Name}.{input.Replace(' ', '_')}".Translate(args);
 
 	public static bool TryGetCosmeticApparelFor(this IEnumerable<CosmeticApparel> vset, Apparel apparel, out CosmeticApparel? tr)
 	{

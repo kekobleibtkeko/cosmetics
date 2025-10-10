@@ -12,7 +12,8 @@ namespace Cosmetics.Mod;
 
 public class CosmeticsMod : Verse.Mod
 {
-	public const string ID = "Cosmetics";
+	public const string Name = "Cosmetics";
+	public const string ID = $"[TS] {Name}";
 	public const string ModID = "tsuyao.cosmetics";
 	public static CosmeticsMod Instance = default!;
 
