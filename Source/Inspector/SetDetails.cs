@@ -38,10 +38,10 @@ public static class SetDetails
 		using var list = new TSUtil.Listing_D(rect);
 
 		if (active_set is null)
-			{
-				list.Listing.Label("no set selected".ModTranslate());
-				return false;
-			}
+		{
+			list.Listing.Label("no set selected".ModTranslate());
+			return false;
+		}
 
 		{   // name edit
 			var name_edit_rect = list.Listing.Labled(27, "name edit", CosmeticsUtil.ModTranslate);
