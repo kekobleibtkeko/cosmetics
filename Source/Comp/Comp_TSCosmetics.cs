@@ -268,9 +268,12 @@ public class Comp_TSCosmetics : ThingComp, IBodyTransform
 		return [new PawnRenderNode_TSCosmetics(this)];
 	}
 
-    public override void PostExposeData()
-    {
-        Scribe_Deep.Look(ref Save, "data");
+	public override void PostExposeData()
+	{
+		Scribe_Deep.Look(ref Save, "data");
+
+		foreach (var set in Save.Sets)
+			set.Pawn = Pawn;
     }
 
 	public BodyTransforms GetBodyTransforms() => Save.BodyTransforms;

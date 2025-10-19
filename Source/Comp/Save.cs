@@ -16,7 +16,7 @@ public class Save : IExposable
     public List<CosmeticSet> Sets = [];
 	public BodyTransforms BodyTransforms = new();
 
-    public void ExposeData()
+	public void ExposeData()
 	{
 		Scribe_Values.Look(ref CompState, "state");
 		Scribe_Deep.Look(ref BodyTransforms, "bodytrs");

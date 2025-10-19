@@ -64,7 +64,7 @@ public class Window_TransformEditor : Window
 	public TransformStateType TransformState;
 	public EditSettingType EditSettings;
 
-	public override Vector2 InitialSize => new(1250, 1150);
+	public override Vector2 InitialSize => new(1250, 1080);
 
 	public int ActiveTicks;
 

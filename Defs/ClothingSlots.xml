@@ -11,33 +11,9 @@
 	</Cosmetics.Data.CLothingSlotDef>
 
 	<Cosmetics.Data.CLothingSlotDef>
-		<defName>TopShell</defName>
-		<label>Coat</label>
-		<order>100</order>
-		<bodyParts>
-			<li>Torso</li>
-		</bodyParts>
-		<apparelLayers>
-			<li>Shell</li>
-		</apparelLayers>
-	</Cosmetics.Data.CLothingSlotDef>
-
-	<Cosmetics.Data.CLothingSlotDef>
-		<defName>TopMiddle</defName>
-		<label>Middle</label>
-		<order>200</order>
-		<bodyParts>
-			<li>Torso</li>
-		</bodyParts>
-		<apparelLayers>
-			<li>Middle</li>
-		</apparelLayers>
-	</Cosmetics.Data.CLothingSlotDef>
-
-	<Cosmetics.Data.CLothingSlotDef>
 		<defName>TopSkin</defName>
 		<label>Shirt</label>
-		<order>300</order>
+		<order>100</order>
 		<bodyParts>
 			<li>Torso</li>
 		</bodyParts>
@@ -49,10 +25,34 @@
 	<Cosmetics.Data.CLothingSlotDef>
 		<defName>Bottom</defName>
 		<label>Pants</label>
-		<order>400</order>
+		<order>200</order>
 		<bodyParts>
 			<li>Legs</li>
 		</bodyParts>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>TopShell</defName>
+		<label>Coat</label>
+		<order>300</order>
+		<bodyParts>
+			<li>Torso</li>
+		</bodyParts>
+		<apparelLayers>
+			<li>Shell</li>
+		</apparelLayers>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
+		<defName>TopMiddle</defName>
+		<label>Middle</label>
+		<order>400</order>
+		<bodyParts>
+			<li>Torso</li>
+		</bodyParts>
+		<apparelLayers>
+			<li>Middle</li>
+		</apparelLayers>
 	</Cosmetics.Data.CLothingSlotDef>
 
 	<Cosmetics.Data.CLothingSlotDef>

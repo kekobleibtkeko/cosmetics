@@ -35,11 +35,17 @@ public static class SetList
 		}
 
 		list.Listing.GetRect(400).DrawDraggableList(
-			comp.Save.Sets,
+			comp.Save.Sets.ToList(),
 			(set, set_rect) =>
 			{
 				using (new TSUtil.TextAnchor_D(TextAnchor.MiddleLeft))
 					Widgets.Label(set_rect, set.Name);
+				var rects = set_rect.RectsIn(true).GetEnumerator();
+				if (Widgets.ButtonImage(rects.Next(), TexButton.CloseXBig))
+				{
+					comp.Save.Sets.Remove(set);
+					comp.NotifyUpdate();
+				}
 			},
 			is_active: set => comp.EditingSet == set,
 			click_fun: set => comp.EditingSet = set,

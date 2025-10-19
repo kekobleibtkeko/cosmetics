@@ -103,7 +103,7 @@ public class CosmeticSet : IExposable
 		Comp_TSCosmetics.CompUpdateNotify notify
 			= Comp_TSCosmetics.CompUpdateNotify.All | Comp_TSCosmetics.CompUpdateNotify.ForceInternal
 	)
-		=> Pawn.GetComp<Comp_TSCosmetics>()?.NotifyUpdate(notify);
+		=> Pawn?.GetComp<Comp_TSCosmetics>()?.NotifyUpdate(notify);
 
 	public override int GetHashCode()
 	{
