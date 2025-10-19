@@ -96,7 +96,7 @@ public class Window_TransformEditor : Window
 
 	private const float SIDE_PANEL_SIZE = 400;
 	private const float BODY_TYPE_HEIGHT = 70;
-	private const float SIDE_LIST_HEIGHT = 500;
+	private const float SIDE_LIST_HEIGHT = 400;
 	private const float DIRECTION_WHEEL_HEIGHT = 100;
 	private const float BLINKS_PER_TICK = 0.01f;
 	private const float BLINK_DEPTH = 0.2f;
