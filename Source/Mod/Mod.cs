@@ -16,6 +16,7 @@ public class CosmeticsMod : Verse.Mod
 	public const string ID = $"[TS] {Name}";
 	public const string ModID = "tsuyao.cosmetics";
 	public static CosmeticsMod Instance = default!;
+	public static TSLogger Logger = new(Name, TSLogger.Level.Verbose);
 
 	public CosmeticsMod(ModContentPack content) : base(content)
 	{

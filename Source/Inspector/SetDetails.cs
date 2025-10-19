@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cosmetics.Comp;
 using Cosmetics.Data;
+using Cosmetics.Mod;
 using Cosmetics.Util;
 using Cosmetics.Windows;
 using RimWorld;
@@ -145,7 +146,15 @@ public static class SetDetails
 		changed = changed || listing.GetRect(height).DrawDraggableList(
 			CosmeticsUtil.ClothingSlots,
 			draw_fun: (layer, rect) => {
-				if (set.OverriddenWorn.FirstOrDefault(x => x.LinkedSlot?.Def == layer) is CosmeticApparel ap)
+				if (set.OverriddenWorn.FirstOrDefault(x =>
+				{
+					if (x.LinkedSlot is null)
+					{
+						CosmeticsMod.Logger.Warning($"overriden worn slot has no linked slot", x.GetHashCode());
+						return false;
+					}
+					return x.LinkedSlot.Def == layer;
+				}) is CosmeticApparel ap)
 					_draw_existing_override(rect, ap);
 				else
 					_draw_non_override(rect, layer);
