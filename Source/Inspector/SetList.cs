@@ -50,7 +50,7 @@ public static class SetList
 			is_active: set => comp.EditingSet == set,
 			click_fun: set => comp.EditingSet = set,
 			scroll_pos: scroll,
-			button_size: set => 0.9f
+			button_size: set => 0.8f
 		);
 		return changed;
 	}

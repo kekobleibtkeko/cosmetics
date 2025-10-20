@@ -28,6 +28,9 @@ public class CosmeticApparel : CosmeticAttachment
 		public ClothingSlotDef Def = def;
 		public StateType State;
 
+		[Obsolete("Do not use directly, only used for deserialization", true)]
+		public LinkedSlotData() : this(default!) { }
+
 		public Apparel? GetApparelFor(Pawn? pawn)
 		{
 			if (pawn is null)
