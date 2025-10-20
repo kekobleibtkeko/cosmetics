@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Defs>
 	<Cosmetics.Data.CLothingSlotDef>
+		<defName>Eyes</defName>
+		<label>Eyes</label>
+		<order>-100</order>
+		<apparelLayers>
+			<li>Eyes</li>
+		</apparelLayers>
+	</Cosmetics.Data.CLothingSlotDef>
+
+	<Cosmetics.Data.CLothingSlotDef>
 		<defName>Head</defName>
 		<label>Head</label>
 		<order>0</order>
