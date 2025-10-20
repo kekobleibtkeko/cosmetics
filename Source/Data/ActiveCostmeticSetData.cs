@@ -30,24 +30,23 @@ public class ActiveCosmeticSetData
 	{
 		var pawn = BaseSet.Pawn;
 		var set_order = AdditiveSets.Prepend(BaseSet);
-		var disabled_apparel = new HashSet<Apparel>();
+		var linked_slots = CosmeticsUtil.ClothingSlots
+			.ToDictionary(
+				k => k,
+				v => set_order.Select(set => set.GetApparelForSlot(v)?.LinkedSlot)
+			)
+		;
+		var disabled_apparel = linked_slots
+			.ToDictionary(
+				kv => kv.Key,
+				kv => kv.Value.Any(x => x?.State == CosmeticApparel.LinkedSlotData.StateType.Disable)
+			)
+		;
 		foreach (var slot in CosmeticsUtil.ClothingSlots)
 		{
 			var aps_for_slot = set_order.Select(set => set.GetApparelForSlot(slot));
 			if (aps_for_slot.All(x => x is null)
-				|| aps_for_slot.Any(x =>
-				{
-					var ap = x?.LinkedSlot?.GetApparelFor(pawn);
-					if (ap is not null && disabled_apparel.Contains(ap))
-						return true;
-					if (x?.LinkedSlot?.State == CosmeticApparel.LinkedSlotData.StateType.Disable)
-					{
-						if (ap is not null)
-							disabled_apparel.Add(ap);
-						return true;
-					}
-					return false;
-				}))
+				|| (disabled_apparel.TryGetValue(slot, out var disabled) && disabled))
 			{
 				continue;
 			}
