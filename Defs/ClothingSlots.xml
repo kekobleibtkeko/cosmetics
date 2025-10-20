@@ -5,7 +5,7 @@
 		<label>Eyes</label>
 		<order>-100</order>
 		<apparelLayers>
-			<li>Eyes</li>
+			<li>EyeCover</li>
 		</apparelLayers>
 	</Cosmetics.Data.CLothingSlotDef>
 
