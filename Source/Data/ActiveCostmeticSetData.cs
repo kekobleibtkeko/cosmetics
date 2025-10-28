@@ -33,13 +33,30 @@ public class ActiveCosmeticSetData
 		var linked_slots = CosmeticsUtil.ClothingSlots
 			.ToDictionary(
 				k => k,
-				v => set_order.Select(set => set.GetApparelForSlot(v)?.LinkedSlot)
+				v => set_order.Select(set =>
+				{
+					var slot = set.GetApparelForSlot(v)?.LinkedSlot;
+					var apparel = slot?.GetApparelFor(pawn);
+					return (slot, apparel);
+				})
 			)
 		;
 		var disabled_apparel = linked_slots
 			.ToDictionary(
 				kv => kv.Key,
-				kv => kv.Value.Any(x => x?.State == CosmeticApparel.LinkedSlotData.StateType.Disable)
+				kv => kv.Value.Any(x =>
+				{
+					// x?.State == CosmeticApparel.LinkedSlotData.StateType.Disable // OLD
+
+					if (x.slot?.State == CosmeticApparel.LinkedSlotData.StateType.Disable)
+						return true;
+
+					// get the original apparel, check if it's the same for any disabled slot
+					return kv.Value.Any(y =>
+						y.apparel == x.apparel
+						&& y.slot?.State == CosmeticApparel.LinkedSlotData.StateType.Disable
+					);
+				})
 			)
 		;
 		foreach (var slot in CosmeticsUtil.ClothingSlots)
