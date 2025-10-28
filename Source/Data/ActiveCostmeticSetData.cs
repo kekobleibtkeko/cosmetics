@@ -46,11 +46,6 @@ public class ActiveCosmeticSetData
 				kv => kv.Key,
 				kv => kv.Value.Any(x =>
 				{
-					// x?.State == CosmeticApparel.LinkedSlotData.StateType.Disable // OLD
-
-					if (x.slot?.State == CosmeticApparel.LinkedSlotData.StateType.Disable)
-						return true;
-
 					// get the original apparel, check if it's the same for any disabled slot
 					return kv.Value.Any(y =>
 						y.apparel == x.apparel
